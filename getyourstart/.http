@@ -1,0 +1,23 @@
+POST http://localhost:8080/api/jobs
+Content-Type: application/json
+
+{
+  "country": "us",
+  "numResults": 20,
+  "jobTypes": ["frontend developer"],
+  "page": 1,
+  "where": "San Francisco",
+  "distance": 50,
+  "sortBy": "salary",
+  "salaryMin": 60000,
+  "salaryMax": 100000,
+  "fullTime": 1,
+  "partTime": "",
+  "contract": "",
+  "permanent": ""
+}
+
+###
+
+GET http://api.adzuna.com/v1/api/jobs/us/search/1?app_id=67c48fda&app_key=08b40eeb69368a7b9885f6cc84f5ce04&what=frontend+developer&distance=50&results_per_page=20&full_time=1&salary_min=60000&where=San+Francisco&salary_max=100000&sort_by=salary&content-type=application/json
+Content-Type: application/json
