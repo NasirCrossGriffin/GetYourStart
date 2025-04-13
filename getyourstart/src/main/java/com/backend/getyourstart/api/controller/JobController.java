@@ -33,6 +33,9 @@ public class JobController {
     @PostMapping("/api/jobs")
     public ResponseEntity<List<JobObj>> getJobs(@RequestBody JobRequest jobRequest) {
         List<JobObj> jobsFound = jobService.getJobs(jobRequest);
-        return new ResponseEntity<>(jobsFound, HttpStatus.OK);
+        if (jobsFound != null)
+            return new ResponseEntity<>(jobsFound, HttpStatus.OK);
+        else
+            return ResponseEntity.badRequest().body(null);
     }
 }

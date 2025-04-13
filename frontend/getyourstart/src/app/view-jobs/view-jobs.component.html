@@ -1,0 +1,94 @@
+<div class="ViewJobs">
+    <div class="JobMenu">
+        <div class="JobMenuContainer">
+            <p>Jobs: </p>
+            <input class="whatinput" type="text" />
+            <button class="addType" (click)="addType($event)">Add Type</button>
+            <div *ngFor="let type of jobRequest.jobTypes">
+                <p>{{type}}</p>
+            </div>
+            <p>Country: </p>
+            <select value="us" class="countryinput" (change)="alterCountry($event)">
+                <option value="us">us</option>
+                <option value="gb">gb</option>
+                <option value="at">at</option>
+                <option value="au">au</option>
+                <option value="be">be</option>
+                <option value="br">br</option>
+                <option value="ca">ca</option>
+                <option value="ch">ch</option>
+                <option value="de">de</option>
+                <option value="es">es</option>
+                <option value="fr">fr</option>
+                <option value="in">in</option>
+                <option value="it">it</option>
+                <option value="mx">mx</option>
+                <option value="nl">nl</option>
+                <option value="nz">nz</option>
+                <option value="pl">pl</option>
+                <option value="sg">sg</option>
+                <option value="za">za</option>
+            </select>
+            <p>Results Per Page: </p>
+            <input class="resultsinput" type="text" (input)="alterNumResults($event)"/>
+            <p>Where: </p>
+            <input class="whereinput" type="text" (input)="alterWhere($event)"/>
+            <p>Distance: </p>
+            <input class="distanceinput" type="text" (input)="alterDistance($event)"/>
+            <p>Sort By: </p>
+            <select class="sortbyinput" (change)="alterSortBy($event)">
+                <option value="default">default</option>
+                <option value="hybrid">hybrid</option>
+                <option value="date">date</option>
+                <option value="salary">salary</option>
+                <option value="relevance">relevance</option>
+            </select>
+            <p>Salary Minimum: </p>
+            <input class="salarymininput" type="text" (input)="alterSalaryMin($event)"/>
+            <p>Salary Maximum: </p>
+            <input class="salarymaxinput" type="text" (input)="alterSalaryMax($event)"/>
+            <p>Full-Time: </p>
+            <select class="fulltimeinput" (change)="alterFullTime($event)">
+                <option value="true">true</option>
+                <option value="false">false</option>
+            </select>
+            <p>Part-Time: </p>
+            <select class="parttimeinput" (change)="alterPartTime($event)">
+                <option value="true">true</option>
+                <option value="false">false</option>
+            </select>
+            <p>Contract: </p>
+            <select class="contractinput" (change)="alterContract($event)">
+                <option value="true">true</option>
+                <option value="false">false</option>
+            </select>
+            <p>Permanent: </p>
+            <select class="permanentinput" (change)="alterPermanent($event)">
+                <option value="true">true</option>
+                <option value="false">false</option>
+            </select>
+            <button class="submitbutton" (click)="submit()">Submit</button>
+            
+        </div>
+    </div>
+
+    <div class="NoJobs" *ngIf="jobsQueried === false">
+        <p>There are no jobs to show!</p>
+    </div>
+
+    <div class="Jobs" *ngIf="jobsQueried === true">
+        <div *ngFor="let job of jobs">
+            <div class="AdzunaContainer">
+                <div class="AdzunaIconContainer">
+                    <img src="/Adzuna.png" />
+                </div>
+                <div class="AdzunaInfoContainer">
+                    <p>{{job.title}}</p>
+                    <p>{{job.created}}</p>
+                    <p>{{job.company.display_name}}</p>
+                    <p>{{job.location.display_name}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

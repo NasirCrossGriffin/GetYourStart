@@ -29,8 +29,8 @@ public class JobRequestHelper {
 
     public JobRequestHelper() {
         this.requestHelper = new RequestHelper();
-        this.appId = "67c48fda";
-        this.appKey = "08b40eeb69368a7b9885f6cc84f5ce04";
+        this.appId = System.getProperty("APP_ID");
+        this.appKey = System.getProperty("APP_KEY");
     }
 
     public void setQuery(
