@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { getJobs } from "../middleware/jobs-middleware";
+import { getAdzunaJobs, getJSearchJobs } from "../middleware/jobs-middleware";
 
 @Component({
     selector : "app-viewjobs",
@@ -11,8 +11,14 @@ import { getJobs } from "../middleware/jobs-middleware";
 })
 
 export class ViewJobsComponent {
-    jobs : any;
-    jobRequest : any  = {
+    viewingJob : boolean = false;
+    adzunaJobs : any;
+    chosenJob : any = {
+        API : null,
+        job : null
+    }
+    jsearchJobs : any;
+    adzunaJobRequest : any  = {
         country : 'us',
         numResults: null,
         jobTypes: [],
@@ -22,10 +28,21 @@ export class ViewJobsComponent {
         sortBy: null,
         salaryMin: null,
         salaryMax: null,
-        fullTime: null,
+        fullTime: 1,
         partTime: null,
         contract: null,
         permanent: null 
+    };
+    jsearchJobRequest : any  = {
+         job : null,
+         page : 1,
+         numPages : 1,
+         country : 'us',
+         language : 'en',
+         datePosted : 'all',
+         employmentTypes : 'FULLTIME',
+         jobRequirements : 'no_experience',
+         radius : null
     };
     jobsQueried : boolean = false;
 
@@ -33,77 +50,112 @@ export class ViewJobsComponent {
     addType(e : Event) {
         var whatInput = (e.target as HTMLElement).previousElementSibling;
         console.log(whatInput);
-        this.jobRequest.jobTypes.push((whatInput as HTMLInputElement).value);
+        this.adzunaJobRequest.jobTypes.push((whatInput as HTMLInputElement).value);
     }
 
     alterCountry(e : Event) {
-        this.jobRequest.country = (e.target as HTMLSelectElement).value;
+        this.adzunaJobRequest.country = (e.target as HTMLSelectElement).value;
+        this.jsearchJobRequest.country = (e.target as HTMLSelectElement).value;
     }
 
     alterNumResults(e : Event) {
-        this.jobRequest.numResults = (e.target as HTMLInputElement).value;
+        this.adzunaJobRequest.numResults = (e.target as HTMLInputElement).value;
     }
 
     alterPage(e : Event) {
-        this.jobRequest.page = (e.target as HTMLInputElement).value;
+        this.adzunaJobRequest.page = (e.target as HTMLInputElement).value;
     }
 
     alterWhere(e : Event) {
-        this.jobRequest.where = (e.target as HTMLInputElement).value;
+        this.adzunaJobRequest.where = (e.target as HTMLInputElement).value;
     }
 
     alterDistance(e : Event) {
-        this.jobRequest.distance = (e.target as HTMLInputElement).value;
+        this.adzunaJobRequest.distance = (e.target as HTMLInputElement).value;
+        this.jsearchJobRequest.radius = (e.target as HTMLInputElement).value;
     }
 
     alterSortBy(e : Event) {
-        this.jobRequest.sortBy = (e.target as HTMLInputElement).value;
+        this.adzunaJobRequest.sortBy = (e.target as HTMLInputElement).value;
     }
 
     alterSalaryMin(e : Event) {
-        this.jobRequest.salaryMin = (e.target as HTMLInputElement).value;
+        this.adzunaJobRequest.salaryMin = (e.target as HTMLInputElement).value;
     }
 
     alterSalaryMax(e : Event) {
-        this.jobRequest.salaryMax = (e.target as HTMLInputElement).value;
+        this.adzunaJobRequest.salaryMax = (e.target as HTMLInputElement).value;
     }
 
     alterFullTime(e : Event) {
         if ((e.target as HTMLInputElement).value === 'true') {
-            this.jobRequest.fullTime = 1
+            this.adzunaJobRequest.fullTime = 1;
+            this.jsearchJobRequest.employmentTypes = 'FULLTIME';
+            console.log(this.jsearchJobRequest.employmentTypes);
         } else {
-            this.jobRequest.fullTime = null
+            this.adzunaJobRequest.fullTime = null
         }
     }
 
     alterPartTime(e : Event) {
         if ((e.target as HTMLInputElement).value === 'true') {
-            this.jobRequest.partTime = 1
+            this.adzunaJobRequest.partTime = 1
+            this.jsearchJobRequest.employmentTypes = 'PARTTIME';
+            console.log(this.jsearchJobRequest.employmentTypes);
         } else {
-            this.jobRequest.partTime = null
+            this.adzunaJobRequest.partTime = null
         }
     }
 
     alterContract(e : Event) {
         if ((e.target as HTMLInputElement).value === 'true') {
-            this.jobRequest.contract = 1
+            this.adzunaJobRequest.contract = 1
+            this.jsearchJobRequest.employmentTypes = 'CONTRACTOR';
+            console.log(this.jsearchJobRequest.employmentTypes)
+
         } else {
-            this.jobRequest.contract = null
+            this.adzunaJobRequest.contract = null
         }
     }
 
     alterPermanent(e : Event) {
         if ((e.target as HTMLInputElement).value === 'true') {
-            this.jobRequest.permanent = 1
+            this.adzunaJobRequest.permanent = 1
+            this.jsearchJobRequest.employmentTypes = 'CONTRACTOR';
+            console.log(this.jsearchJobRequest.employmentTypes);
         } else {
-            this.jobRequest.permanent = null
+            this.adzunaJobRequest.permanent = null
         }
     }
 
+    setAdzunaJob(index : number) {
+        this.chosenJob.API = "Adzuna";
+        this.chosenJob.job = this.adzunaJobs[index];
+        console.log(index);
+        console.log(this.chosenJob);
+        this.toggleJobView();
+    }
+
+    setJsearchJob(index : number) {
+        this.chosenJob.API = "JSearch";
+        this.chosenJob.job = this.jsearchJobs[index];
+        console.log(index);
+        console.log(this.chosenJob);
+        this.toggleJobView();
+    }
+
+    toggleJobView() {
+        this.viewingJob = !(this.viewingJob);
+    }
+
     async submit() {
-        console.log(this.jobRequest)
-        this.jobs = await getJobs(this.jobRequest);
-        console.log(this.jobs);
+        this.jsearchJobRequest.job = this.adzunaJobRequest.jobTypes.join(", ") + " in " + this.adzunaJobRequest.where;
+        console.log(this.adzunaJobRequest)
+        console.log(this.jsearchJobRequest)
+        this.adzunaJobs = await getAdzunaJobs(this.adzunaJobRequest);
+        this.jsearchJobs = await getJSearchJobs(this.jsearchJobRequest);
+        console.log(this.adzunaJobs);
+        console.log(this.jsearchJobs);
         this.jobsQueried = true;
     }
 

@@ -13,24 +13,26 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 
-import com.backend.getyourstart.dto.JobObj;
-import com.backend.getyourstart.dto.JobResponse;
+import com.backend.getyourstart.dto.AdzunaJob;
+import com.backend.getyourstart.dto.AdzunaJobResponse;
+import com.backend.getyourstart.helpers.Header;
+
 
 import com.backend.getyourstart.helpers.RequestHelper;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.StringBuilder;
 
-public class JobRequestHelper {
+public class AdzunaRequestHelper {
     private RequestHelper requestHelper;
     private String query;
     private String appId;
     private String appKey;
 
-    public JobRequestHelper() {
+    public AdzunaRequestHelper() {
         this.requestHelper = new RequestHelper();
-        this.appId = System.getProperty("APP_ID");
-        this.appKey = System.getProperty("APP_KEY");
+        this.appId = System.getProperty("ADZUNA_APP_ID");
+        this.appKey = System.getProperty("ADZUNA_APP_KEY");
     }
 
     public void setQuery(
@@ -104,9 +106,12 @@ public class JobRequestHelper {
         System.out.println(this.query);
     }
 
-    public List<JobObj> sendRequest() {
+    public List<AdzunaJob> sendRequest() {
         ObjectMapper objectMapper = new ObjectMapper();
-        this.requestHelper.createRequest(query);
+        List<Header> headers = new ArrayList<Header>();
+        headers.add(new Header("Content-Type", "application/json"));
+        headers.add(new Header("accept", "application/json"));
+        this.requestHelper.createRequest(query, headers);
         HttpResponse<String> response = null;
         try {
             response = this.requestHelper.sendRequest();
@@ -119,10 +124,10 @@ public class JobRequestHelper {
 
         System.out.println(responseBody);
 
-        JobResponse jobResponse = null;
+        AdzunaJobResponse jobResponse = null;
 
         try {
-            jobResponse = objectMapper.readValue(responseBody, JobResponse.class);
+            jobResponse = objectMapper.readValue(responseBody, AdzunaJobResponse.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return null;

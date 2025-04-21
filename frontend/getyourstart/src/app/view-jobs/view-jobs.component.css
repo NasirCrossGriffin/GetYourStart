@@ -26,7 +26,7 @@
     height: 100vh;
 }
 
-.AdzunaContainer {
+.JobContainer {
     width : 450px;
     height : 450px;
     position: relative;
@@ -34,11 +34,10 @@
     border-width: 2px;
     border-radius: 20px;
     border-style: solid;
-    margin-bottom: 50px;
     box-shadow: 12px 12px 12px 12px rgb(0, 0, 0, 0.5);
 }
 
-.AdzunaInfoContainer {
+.JobInfoContainer {
     width : 100%;
     height: 100%;
     display: flex;
@@ -48,11 +47,11 @@
     font-size: 20px;
 }
 
-.AdzunaInfoContainer p {
+.JobInfoContainer p {
     width : 70%;
 }
 
-.AdzunaIconContainer {
+.APIIconContainer {
     position: absolute;
     width: 50px;
     height: 50px;
@@ -64,8 +63,53 @@
     justify-content: center;
 }
 
-.AdzunaIconContainer img {
+.APIIconContainer img {
     width: 100%;
     height : 100%;
     object-fit: contain;
+}
+
+.background {
+    position: absolute;
+    background-color: rgb(0, 0, 0, 0.5);
+    width : 100%;
+    height : 100%;
+    z-index: 100;
+}
+
+.ViewTheJob {
+    position: fixed;
+    width : 100vw;
+    height: 100vh;
+    top: 0;
+    left : 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.JobViewContainer {
+    position: absolute;
+    width : 50%;
+    height: 80%;
+    border-radius: 50px;
+    background-color: white;
+    z-index : 200;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 50px 50px 50px 50px;
+    overflow-y: scroll;
+}
+
+.JobViewContainer p {
+    font-size: 20px;
+}
+
+.JobButton {
+    background-color: transparent;
+    border-color: transparent;
+    margin-bottom: 50px;
 }

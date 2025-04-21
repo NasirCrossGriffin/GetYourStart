@@ -2,7 +2,7 @@ package com.backend.getyourstart.dto;
 
 import java.util.List;
 
-public class JobRequest {
+public class AdzunaJobRequest {
     public String country; 
     public String numResults; 
     public List<String> jobTypes; 
@@ -17,7 +17,7 @@ public class JobRequest {
     public String contract;
     public String permanent;
 
-    public JobRequest() {
+    public AdzunaJobRequest() {
 
     }
 

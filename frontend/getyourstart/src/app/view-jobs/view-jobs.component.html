@@ -4,7 +4,7 @@
             <p>Jobs: </p>
             <input class="whatinput" type="text" />
             <button class="addType" (click)="addType($event)">Add Type</button>
-            <div *ngFor="let type of jobRequest.jobTypes">
+            <div *ngFor="let type of adzunaJobRequest.jobTypes">
                 <p>{{type}}</p>
             </div>
             <p>Country: </p>
@@ -77,18 +77,58 @@
     </div>
 
     <div class="Jobs" *ngIf="jobsQueried === true">
-        <div *ngFor="let job of jobs">
-            <div class="AdzunaContainer">
-                <div class="AdzunaIconContainer">
-                    <img src="/Adzuna.png" />
+        <div *ngFor="let job of adzunaJobs; let i = index">
+            <button class="JobButton" [id]="i" (click)="setAdzunaJob(i)">
+                <div class="JobContainer">
+                    <div class="APIIconContainer">
+                        <img src="/Adzuna.png" />
+                    </div>
+                    <div class="JobInfoContainer">
+                        <p>{{job.title}}</p>
+                        <p>{{job.created}}</p>
+                        <p>{{job.company.display_name}}</p>
+                        <p>{{job.location.display_name}}</p>
+                    </div>
                 </div>
-                <div class="AdzunaInfoContainer">
-                    <p>{{job.title}}</p>
-                    <p>{{job.created}}</p>
-                    <p>{{job.company.display_name}}</p>
-                    <p>{{job.location.display_name}}</p>
+            </button>
+        </div>
+
+        <div *ngFor="let job of jsearchJobs; let i = index">
+            <button class="JobButton" [id]="i" (click)="setJsearchJob(i)">
+                <div class="JobContainer">
+                    <div class="APIIconContainer">
+                        <img src="/Rapid-API.png" />
+                    </div>
+                    <div class="JobInfoContainer">
+                        <p>{{job.job_title || ""}}</p>
+                        <p>{{job.job_posted_human_readable || ""}}</p>
+                        <p>{{job.employer_name || ""}}</p>
+                        <p>{{job.job_location || ""}}</p>
+                    </div>
                 </div>
-            </div>
+            </button>
+        </div>
+
+        
+    </div>
+
+    <div class="ViewTheJob" *ngIf="viewingJob === true">
+        <div class="background" (click)="toggleJobView()"></div>
+        <div class="JobViewContainer">
+            <h1 *ngIf="chosenJob.API === 'Adzuna'">{{chosenJob.job.title || ""}}</h1>
+            <h1 *ngIf="chosenJob.API === 'JSearch'">{{chosenJob.job.job_title || ""}}</h1>
+            <h2 *ngIf="chosenJob.API === 'Adzuna'">{{chosenJob.job.company.display_name || ""}}</h2>
+            <h2 *ngIf="chosenJob.API === 'JSearch'">{{chosenJob.job.job_publisher || ""}}</h2>
+            <p *ngIf="chosenJob.API === 'Adzuna'">{{chosenJob.job.created || ""}}</p>
+            <p *ngIf="chosenJob.API === 'JSearch'">{{chosenJob.job.job_posted_human_readable || ""}}</p>
+            <p *ngIf="chosenJob.API === 'Adzuna'">{{chosenJob.job.description || ""}}</p>
+            <p *ngIf="chosenJob.API === 'JSearch'">{{chosenJob.job.job_description || ""}}</p>
+            <p *ngIf="chosenJob.API === 'Adzuna'">Salary Min: {{chosenJob.job.salary_min || ""}}</p>
+            <p *ngIf="chosenJob.API === 'JSearch'">Salary Min: {{chosenJob.job.job_min_salary || ""}}</p>
+            <p *ngIf="chosenJob.API === 'Adzuna'">Salary Max: {{chosenJob.job.salary_max || ""}}</p>
+            <p *ngIf="chosenJob.API === 'JSearch'">Salary Max: {{chosenJob.job.job_max_salary || ""}}</p>
+            <a [href]="chosenJob.job.redirect_url" *ngIf="chosenJob.API === 'Adzuna'">Apply Here</a>
+            <a [href]="chosenJob.job.job_apply_link" *ngIf="chosenJob.API === 'JSearch'">Apply Here</a>
         </div>
     </div>
 </div>

@@ -3,7 +3,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Category {
+public class AdzunaCategory {
      private String category;
      private String label;
      private String tag;

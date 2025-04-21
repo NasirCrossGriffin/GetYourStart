@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.net.http.HttpRequest.Builder;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.net.http.HttpResponse.PushPromiseHandler;
@@ -13,6 +14,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
+import java.util.List;
+import com.backend.getyourstart.helpers.Header;
+
 
 
 
@@ -27,15 +31,17 @@ public class RequestHelper {
         .build();  
     }
 
-    public void createRequest(String URL) {
+    public void createRequest(String URL, List<Header> headers) {
         System.out.println(URL);
-        this.request = HttpRequest.newBuilder()
-            .uri(URI.create(URL))
-            .timeout(Duration.ofMinutes(2))
-            .header("Content-Type", "application/json")
-            .header("Accept", "application/json")
+        Builder requestBuilder = HttpRequest.newBuilder()
             .GET()
-            .build();
+            .uri(URI.create(URL))
+            .timeout(Duration.ofMinutes(2));
+            headers.forEach((header) -> {
+                requestBuilder.header(header.getName(), header.getValue());
+            });
+
+            this.request = requestBuilder.build();   
     }
 
     public HttpResponse<String> sendRequest() throws InterruptedException, ExecutionException, TimeoutException {

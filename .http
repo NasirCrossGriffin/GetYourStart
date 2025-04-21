@@ -1,4 +1,4 @@
-POST http://localhost:8080/api/jobs
+POST http://localhost:8080/api/adzuna/job
 Content-Type: application/json
 
 {
@@ -19,5 +19,38 @@ Content-Type: application/json
 
 ###
 
-GET http://api.adzuna.com/v1/api/jobs/us/search/1?app_id=67c48fda&app_key=08b40eeb69368a7b9885f6cc84f5ce04&what=frontend+developer&distance=50&results_per_page=20&full_time=1&salary_min=60000&where=San+Francisco&salary_max=100000&sort_by=salary&content-type=application/json
+POST http://localhost:8080/api/jsearch/job
 Content-Type: application/json
+
+{
+  "job": "JavaScript Developer",
+  "country": "us",
+  "page": 1,
+  "numPages": 1,
+  "language": "en",
+  "datePosted": "all",
+  "employmentTypes": "FULLTIME",
+  "jobRequirements": "no_experience",
+  "radius": 50
+}
+
+###
+
+POST http://localhost:8080/api/user
+Content-Type: application/json
+
+{
+  "username" : "NasirGriffin",
+  "password" : "SuperNovaEdge1998%"
+}
+
+###
+
+POST http://localhost:8080/api/user/authenticate
+Content-Type: application/json
+
+{
+  "username" : "NasirGriffin",
+  "password" : "SuperNovaEdge1998%"
+}
+

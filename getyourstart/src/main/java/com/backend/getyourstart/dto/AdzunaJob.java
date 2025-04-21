@@ -4,18 +4,23 @@ package com.backend.getyourstart.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class JobObj {
-    public String title;
-    public String description;
-    public String redirect_url;
-    public String created;
-    public Double salary_min;
-    public Double salary_max;
-    public String contract_time;
-    public String salary_is_predicted;
-    public Company company;
-    public Location location;
-    public Category category;
+public class AdzunaJob {
+    private String title;
+    private String description;
+    private String redirect_url;
+    private String created;
+    private Double salary_min;
+    private Double salary_max;
+    private String contract_time;
+    private String salary_is_predicted;
+    private AdzunaCompany company;
+    private AdzunaLocation location;
+    private AdzunaCategory category;
+
+
+    public AdzunaJob() {
+        
+    }
 
 
     public String getTitle() {
@@ -82,27 +87,27 @@ public class JobObj {
         this.salary_is_predicted = salary_is_predicted;
     }
 
-    public Company getCompany() {
+    public AdzunaCompany getCompany() {
         return this.company;
     }
 
-    public void setCompany(Company company) {
+    public void setCompany(AdzunaCompany company) {
         this.company = company;
     }
 
-    public Location getLocation() {
+    public AdzunaLocation getLocation() {
         return this.location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(AdzunaLocation location) {
         this.location = location;
     }
 
-    public Category getCategory() {
+    public AdzunaCategory getCategory() {
         return this.category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(AdzunaCategory category) {
         this.category = category;
     }
 
