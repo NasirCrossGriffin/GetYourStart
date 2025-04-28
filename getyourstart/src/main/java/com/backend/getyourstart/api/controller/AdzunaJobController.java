@@ -1,32 +1,21 @@
 package com.backend.getyourstart.api.controller;
 
 import java.util.List;
-import java.util.ArrayList;
-
-import com.backend.getyourstart.helpers.AdzunaRequestHelper;
-import com.backend.getyourstart.repository.AdzunaJobRepository;
-import com.backend.getyourstart.dto.AdzunaJobRequest;
-import com.backend.getyourstart.api.service.AdzunaJobService;
-import com.backend.getyourstart.dto.AdzunaJob;
-
-import java.net.http.HttpResponse;
-
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.backend.getyourstart.api.service.AdzunaJobService;
+import com.backend.getyourstart.dto.AdzunaJob;
 import com.backend.getyourstart.dto.AdzunaJobHttpResponse;
+import com.backend.getyourstart.dto.AdzunaJobRequest;
 import com.backend.getyourstart.models.AdzunaJobModel;
-import com.backend.getyourstart.repository.UserRepository;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -61,8 +50,8 @@ public class AdzunaJobController {
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @PostMapping("/api/adzuna/job/save/get")
-    public ResponseEntity<List<AdzunaJobHttpResponse>> getSavedJobs(@RequestBody String userId) {
+    @PostMapping("/api/adzuna/job/save/get/{userId}")
+    public ResponseEntity<List<AdzunaJobHttpResponse>> getSavedJobs(@PathVariable String userId) {
         List<AdzunaJobHttpResponse> savedAdzunaJobs = jobService.getSavedJobs(userId);
         if (savedAdzunaJobs != null)
             return new ResponseEntity<>(savedAdzunaJobs, HttpStatus.OK);

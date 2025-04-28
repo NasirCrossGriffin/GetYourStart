@@ -1,6 +1,8 @@
 package com.backend.getyourstart.dto;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+
+import com.backend.getyourstart.models.JSearchJobModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -33,11 +35,6 @@ public class JSearchJob {
     private String job_salary_currency;
     private String job_salary_period;
     private JSearchJobHighlights job_highlights;
-    //private Long job_offer_expiration_timestamp;
-    //private Boolean job_no_experience_required;
-    //private Integer required_experience_in_months;
-    //private Boolean experience_mentioned;
-    //private Boolean experience_preferred;
 
 
     public String getJob_id() {
@@ -266,6 +263,49 @@ public class JSearchJob {
 
     public void setJob_highlights(JSearchJobHighlights job_highlights) {
         this.job_highlights = job_highlights;
+    }
+
+    public static JSearchJobModel createModel(JSearchJob job) {
+        JSearchJobModel model = new JSearchJobModel();
+        
+        model.setJob_id(job.getJob_id());
+        model.setEmployer_name(job.getEmployer_name());
+        model.setEmployer_logo(job.getEmployer_logo());
+        model.setEmployer_website(job.getEmployer_website());
+        model.setEmployer_company_type(job.getEmployer_company_type());
+        model.setEmployer_linkedin(job.getEmployer_linkedin());
+        model.setJob_publisher(job.getJob_publisher());
+        model.setJob_employment_type(job.getJob_employment_type());
+
+        // Convert List<String> to comma-separated string
+        model.setJob_employment_types(String.join(",", job.getJob_employment_types() != null ? job.getJob_employment_types() : new ArrayList<>()));
+        model.setJob_benefits(String.join(",", job.getJob_benefits() != null ? job.getJob_benefits() : new ArrayList<>()));
+
+        model.setJob_employment_type_text(job.getJob_employment_type_text());
+        model.setJob_title(job.getJob_title());
+        model.setJob_apply_link(job.getJob_apply_link());
+        model.setJob_description(job.getJob_description());
+        model.setJob_is_remote(job.getJob_is_remote());
+        model.setJob_posted_human_readable(job.getJob_posted_human_readable());
+        model.setJob_location(job.getJob_location());
+        model.setJob_city(job.getJob_city());
+        model.setJob_state(job.getJob_state());
+        model.setJob_country(job.getJob_country());
+        model.setJob_google_link(job.getJob_google_link());
+        model.setJob_offer_expiration_datetime_utc(job.getJob_offer_expiration_datetime_utc());
+        model.setJob_salary(job.getJob_salary());
+        model.setJob_min_salary(job.getJob_min_salary());
+        model.setJob_max_salary(job.getJob_max_salary());
+        model.setJob_salary_currency(job.getJob_salary_currency());
+        model.setJob_salary_period(job.getJob_salary_period());
+
+        // If your Qualifications and Requirements come from highlights
+        if (job.getJob_highlights() != null) {
+            model.setQualifications(String.join(",", job.getJob_highlights().getQualifications()));
+            model.setRequirements(String.join(",", job.getJob_highlights().getRequirements()));
+        }
+
+        return model;
     }
 
 }

@@ -1,21 +1,4 @@
-package com.backend.getyourstart.api.controller;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.backend.getyourstart.api.service.UserService;
-import com.backend.getyourstart.dto.AuthenticationRequest;
-import com.backend.getyourstart.dto.UserRequest;
-import com.backend.getyourstart.dto.UserResponse;
-
-import jakarta.servlet.http.HttpSession;
-
+/*
 @RestController
 public class UserController {
     private UserService userService;
@@ -68,5 +51,66 @@ public class UserController {
          } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
          }
+    }
+}
+*/
+
+export async function createUser(userRequest : any) {
+    const foundUserResponse : Response = await fetch("http://localhost:8080/api/user", {
+        method : "POST",
+        headers : {"Content-Type" : "application/json"},
+        body : JSON.stringify(userRequest)
+    });
+
+    if (foundUserResponse.ok) {
+        const foundUser = foundUserResponse.json();
+        return foundUser;
+    } else {
+        return null;
+    }
+}
+
+export async function authenticateUser(userRequest : any) {
+    const foundUserResponse : Response = await fetch("http://localhost:8080/api/user/authenticate", {
+        method : "POST",
+        headers : {"Content-Type" : "application/json"},
+        credentials: 'include',  
+        body : JSON.stringify(userRequest)
+    });
+
+    if (foundUserResponse.ok) {
+        const foundUser = await foundUserResponse.json();
+        return foundUser;
+    } else {
+        return null;
+    }
+}
+
+export async function logoutUser() {
+    const Response : Response = await fetch("http://localhost:8080/api/user/logout", {
+        method : "POST",
+    });
+
+    if (Response.ok) {
+        const message = await Response.text();
+        console.log(message);
+        return message;
+    } else {
+        return null;
+    }
+}
+
+export async function getLoggedInUser() {
+    const foundUserResponse : Response = await fetch("http://localhost:8080/api/user/check", {
+        method : "POST",
+        headers : {"Content-Type" : "application/json"},
+        credentials: 'include',  
+    });
+
+    if (foundUserResponse.ok) {
+        const foundUser = await foundUserResponse.json();
+        return foundUser;
+    } else {
+        return null;
     }
 }

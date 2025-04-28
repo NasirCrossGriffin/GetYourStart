@@ -72,11 +72,11 @@
         </div>
     </div>
 
-    <div class="NoJobs" *ngIf="jobsQueried === false">
+    <div class="NoJobs" *ngIf="jobsQueried === false && loading === false">
         <p>There are no jobs to show!</p>
     </div>
 
-    <div class="Jobs" *ngIf="jobsQueried === true">
+    <div class="Jobs" *ngIf="jobsQueried === true && loading === false">
         <div *ngFor="let job of adzunaJobs; let i = index">
             <button class="JobButton" [id]="i" (click)="setAdzunaJob(i)">
                 <div class="JobContainer">
@@ -112,23 +112,40 @@
         
     </div>
 
-    <div class="ViewTheJob" *ngIf="viewingJob === true">
+    <div class="ViewTheJob" *ngIf="viewingJob === true && loading === false">
         <div class="background" (click)="toggleJobView()"></div>
         <div class="JobViewContainer">
-            <h1 *ngIf="chosenJob.API === 'Adzuna'">{{chosenJob.job.title || ""}}</h1>
-            <h1 *ngIf="chosenJob.API === 'JSearch'">{{chosenJob.job.job_title || ""}}</h1>
-            <h2 *ngIf="chosenJob.API === 'Adzuna'">{{chosenJob.job.company.display_name || ""}}</h2>
-            <h2 *ngIf="chosenJob.API === 'JSearch'">{{chosenJob.job.job_publisher || ""}}</h2>
-            <p *ngIf="chosenJob.API === 'Adzuna'">{{chosenJob.job.created || ""}}</p>
-            <p *ngIf="chosenJob.API === 'JSearch'">{{chosenJob.job.job_posted_human_readable || ""}}</p>
-            <p *ngIf="chosenJob.API === 'Adzuna'">{{chosenJob.job.description || ""}}</p>
-            <p *ngIf="chosenJob.API === 'JSearch'">{{chosenJob.job.job_description || ""}}</p>
-            <p *ngIf="chosenJob.API === 'Adzuna'">Salary Min: {{chosenJob.job.salary_min || ""}}</p>
-            <p *ngIf="chosenJob.API === 'JSearch'">Salary Min: {{chosenJob.job.job_min_salary || ""}}</p>
-            <p *ngIf="chosenJob.API === 'Adzuna'">Salary Max: {{chosenJob.job.salary_max || ""}}</p>
-            <p *ngIf="chosenJob.API === 'JSearch'">Salary Max: {{chosenJob.job.job_max_salary || ""}}</p>
-            <a [href]="chosenJob.job.redirect_url" *ngIf="chosenJob.API === 'Adzuna'">Apply Here</a>
-            <a [href]="chosenJob.job.job_apply_link" *ngIf="chosenJob.API === 'JSearch'">Apply Here</a>
+            <div class="JobViewInnerContainer">
+                <h1 *ngIf="chosenJob.API === 'Adzuna'">{{chosenJob.job.title || ""}}</h1>
+                <h1 *ngIf="chosenJob.API === 'JSearch'">{{chosenJob.job.job_title || ""}}</h1>
+                <h2 *ngIf="chosenJob.API === 'Adzuna'">{{chosenJob.job.company.display_name || ""}}</h2>
+                <h2 *ngIf="chosenJob.API === 'JSearch'">{{chosenJob.job.job_publisher || ""}}</h2>
+                <p *ngIf="chosenJob.API === 'Adzuna'">{{chosenJob.job.created || ""}}</p>
+                <p *ngIf="chosenJob.API === 'JSearch'">{{chosenJob.job.job_posted_human_readable || ""}}</p>
+                <p *ngIf="chosenJob.API === 'Adzuna'">{{chosenJob.job.description || ""}}</p>
+                <p *ngIf="chosenJob.API === 'JSearch'">{{chosenJob.job.job_description || ""}}</p>
+                <p *ngIf="chosenJob.API === 'Adzuna'">Salary Min: {{chosenJob.job.salary_min || ""}}</p>
+                <p *ngIf="chosenJob.API === 'JSearch'">Salary Min: {{chosenJob.job.job_min_salary || ""}}</p>
+                <p *ngIf="chosenJob.API === 'Adzuna'">Salary Max: {{chosenJob.job.salary_max || ""}}</p>
+                <p *ngIf="chosenJob.API === 'JSearch'">Salary Max: {{chosenJob.job.job_max_salary || ""}}</p>
+                <a [href]="chosenJob.job.redirect_url" *ngIf="chosenJob.API === 'Adzuna'">Apply Here</a>
+                <a [href]="chosenJob.job.job_apply_link" *ngIf="chosenJob.API === 'JSearch'">Apply Here</a>
+                <button  *ngIf="chosenJob.API === 'Adzuna'" (click)="saveAdzunaJobHandler()">Save Job</button>
+                <button  *ngIf="chosenJob.API === 'JSearch'" (click)="saveJSearchJobHandler()">Save Job</button>
+            </div>
         </div>
     </div>
+
+    <div class="LoadingScreen" *ngIf="loading === true">
+        <div class="SaplingImage">
+            <img src="/Sapling.png"/>
+        </div>
+    </div>
+
+   <div [class]="saveConfirmation ? 'SaveEnter' : 'SaveExit'" [style.opacity]="saveJobRevealed ? '1' : '0'" >
+        <div class="saveConfirmationContainer">
+            <p>Job Saved Successfully!</p>
+        </div>
+   </div> 
 </div>
+

@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { getAdzunaJobs, getJSearchJobs } from "../middleware/jobs-middleware";
+import { getAdzunaJobs, getJSearchJobs, saveJSearchJob } from "../middleware/jobs-middleware";
+import { saveAdzunaJob } from "../middleware/jobs-middleware";
 
 @Component({
     selector : "app-viewjobs",
@@ -13,6 +14,8 @@ import { getAdzunaJobs, getJSearchJobs } from "../middleware/jobs-middleware";
 export class ViewJobsComponent {
     viewingJob : boolean = false;
     adzunaJobs : any;
+    loading : boolean = false;
+    saveConfirmation : boolean = false;
     chosenJob : any = {
         API : null,
         job : null
@@ -45,6 +48,7 @@ export class ViewJobsComponent {
          radius : null
     };
     jobsQueried : boolean = false;
+    saveJobRevealed : boolean = false;
 
 
     addType(e : Event) {
@@ -149,6 +153,7 @@ export class ViewJobsComponent {
     }
 
     async submit() {
+        this.loading = true;
         this.jsearchJobRequest.job = this.adzunaJobRequest.jobTypes.join(", ") + " in " + this.adzunaJobRequest.where;
         console.log(this.adzunaJobRequest)
         console.log(this.jsearchJobRequest)
@@ -157,6 +162,31 @@ export class ViewJobsComponent {
         console.log(this.adzunaJobs);
         console.log(this.jsearchJobs);
         this.jobsQueried = true;
+        this.loading = false;
+    }
+
+    async saveAdzunaJobHandler() {
+        const savedJob = saveAdzunaJob(this.chosenJob.job);
+        this.saveJobRevealed = true;
+        this.saveConfirmation = true;
+        setTimeout(() => {
+            this.hideSaveConfirmation();
+          }, 5000);
+        console.log(savedJob);
+    }
+
+    async saveJSearchJobHandler() {
+        const savedJob = saveJSearchJob(this.chosenJob.job);
+        this.saveJobRevealed = true;
+        this.saveConfirmation = true;
+        setTimeout(() => {
+            this.hideSaveConfirmation();
+          }, 5000);
+        console.log(savedJob);
+    }
+
+    hideSaveConfirmation() {
+        this.saveConfirmation = false;
     }
 
 }

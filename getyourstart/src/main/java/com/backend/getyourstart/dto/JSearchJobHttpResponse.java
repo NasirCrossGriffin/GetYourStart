@@ -1,121 +1,50 @@
-package com.backend.getyourstart.models;
-import com.backend.getyourstart.dto.JSearchJobHttpResponse;
+package com.backend.getyourstart.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "jsearch_jobs")
-public class JSearchJobModel {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    
-    @Column(name = "job_id", nullable = false, length = 255)
+public class JSearchJobHttpResponse {
+    private String id;
     private String job_id;
-
-    @Column(name = "employer_name", nullable = false, length = 100)
     private String employer_name;
-
-    @Column(name = "employer_logo", length = 100)
     private String employer_logo;
-
-    @Column(name = "employer_website", length = 100)
     private String employer_website;
-
-    @Column(name = "employer_company_type", length = 100)
     private String employer_company_type;
-
-    @Column(name = "employer_linkedin", length = 255)
     private String employer_linkedin;
-
-    @Column(name = "job_publisher", length = 100)
     private String job_publisher;
-
-    @Column(name = "job_employment_type", length = 100)
     private String job_employment_type;
-
-    @Column(name = "job_employment_types", length = 255)
     private String job_employment_types;
-
-    @Column(name = "job_employment_type_text", length = 255)
     private String job_employment_type_text;
-
-    @Column(name = "job_title", length = 255)
     private String job_title;
-
-    @Column(name = "job_apply_link", length = 500)
     private String job_apply_link;
-
-    @Lob
-    @Column(name = "job_description", columnDefinition = "TEXT")
     private String job_description;
-
-    @Column(name = "job_is_remote")
     private Boolean job_is_remote;
-
-    @Column(name = "job_posted_human_readable", length = 100)
     private String job_posted_human_readable;
-
-    @Column(name = "job_location", length = 255)
     private String job_location;
-
-    @Column(name = "job_city", length = 100)
     private String job_city;
-
-    @Column(name = "job_state", length = 100)
     private String job_state;
-
-    @Column(name = "job_country", length = 100)
     private String job_country;
-
-    @Lob
-    @Column(name = "job_benefits", columnDefinition = "TEXT")
     private String job_benefits;
-
-    @Column(name = "job_google_link", length = 500)
     private String job_google_link;
-
-    @Column(name = "job_offer_expiration_datetime_utc", length = 100)
     private String job_offer_expiration_datetime_utc;
-
-    @Column(name = "job_salary", length = 100)
     private String job_salary;
-
-    @Column(name = "job_min_salary")
     private Double job_min_salary;
-
-    @Column(name = "job_max_salary")
     private Double job_max_salary;
-
-    @Column(name = "job_salary_currency", length = 10)
     private String job_salary_currency;
-
-    @Column(name = "job_salary_period", length = 50)
     private String job_salary_period;
-
-    @Lob
-    @Column(name = "Qualifications", columnDefinition = "TEXT")
+    private String job_highlights;
     private String Qualifications;
-
-    @Lob
-    @Column(name = "Requirements", columnDefinition = "TEXT")
     private String Requirements;
+    private Long userId;
 
-    @ManyToOne
-    @JoinColumn(name="users", nullable=false, updatable=false)
-    private UserModel user;
-
-    public JSearchJobModel() {
+    public JSearchJobHttpResponse() {
 
     }
 
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getJob_id() {
         return this.job_id;
@@ -337,6 +266,15 @@ public class JSearchJobModel {
         this.job_salary_period = job_salary_period;
     }
 
+    public String getJob_highlights() {
+        return this.job_highlights;
+    }
+
+    public void setJob_highlights(String job_highlights) {
+        this.job_highlights = job_highlights;
+    }
+
+
     public String getQualifications() {
         return this.Qualifications;
     }
@@ -353,49 +291,14 @@ public class JSearchJobModel {
         this.Requirements = Requirements;
     }
 
-    public UserModel user() {
-        return this.user;
+
+    public Long getUserId() {
+        return this.userId;
     }
 
-    public void setUser(UserModel user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public JSearchJobHttpResponse createResponse() {
-        JSearchJobHttpResponse response = new JSearchJobHttpResponse();
-        
-        response.setId(this.id.toString());
-        response.setJob_id(this.job_id);
-        response.setEmployer_name(this.employer_name);
-        response.setEmployer_logo(this.employer_logo);
-        response.setEmployer_website(this.employer_website);
-        response.setEmployer_company_type(this.employer_company_type);
-        response.setEmployer_linkedin(this.employer_linkedin);
-        response.setJob_publisher(this.job_publisher);
-        response.setJob_employment_type(this.job_employment_type);
-        response.setJob_employment_types(this.job_employment_types);
-        response.setJob_employment_type_text(this.job_employment_type_text);
-        response.setJob_title(this.job_title);
-        response.setJob_apply_link(this.job_apply_link);
-        response.setJob_description(this.job_description);
-        response.setJob_is_remote(this.job_is_remote);
-        response.setJob_posted_human_readable(this.job_posted_human_readable);
-        response.setJob_location(this.job_location);
-        response.setJob_city(this.job_city);
-        response.setJob_state(this.job_state);
-        response.setJob_country(this.job_country);
-        response.setJob_benefits(this.job_benefits);
-        response.setJob_google_link(this.job_google_link);
-        response.setJob_offer_expiration_datetime_utc(this.job_offer_expiration_datetime_utc);
-        response.setJob_salary(this.job_salary);
-        response.setJob_min_salary(this.job_min_salary);
-        response.setJob_max_salary(this.job_max_salary);
-        response.setJob_salary_currency(this.job_salary_currency);
-        response.setJob_salary_period(this.job_salary_period);
-        response.setQualifications(this.Qualifications);
-        response.setRequirements(this.Requirements);
-        response.setUserId(this.user.getId()); 
     
-        return response;
-    }
 }

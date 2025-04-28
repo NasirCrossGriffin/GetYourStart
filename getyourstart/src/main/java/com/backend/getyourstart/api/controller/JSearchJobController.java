@@ -1,32 +1,31 @@
 package com.backend.getyourstart.api.controller;
 
 import java.util.List;
-import java.util.ArrayList;
-import com.backend.getyourstart.helpers.JSearchRequestHelper;
-import com.backend.getyourstart.dto.JSearchJobRequest;
-import com.backend.getyourstart.api.service.JSearchJobService;
-import com.backend.getyourstart.dto.JSearchJob;
-import java.net.http.HttpResponse;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.backend.getyourstart.api.service.JSearchJobService;
+import com.backend.getyourstart.dto.JSearchJob;
+import com.backend.getyourstart.dto.JSearchJobHttpResponse;
+import com.backend.getyourstart.dto.JSearchJobRequest;
+import com.backend.getyourstart.models.JSearchJobModel;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 public class JSearchJobController {
     private JSearchJobService jobService;
 
     @Autowired
-    public JSearchJobController() {
-        this.jobService = new JSearchJobService();
+    public JSearchJobController(JSearchJobService jobService) {
+        this.jobService = jobService;
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
@@ -39,5 +38,25 @@ public class JSearchJobController {
             return ResponseEntity.badRequest().body(null);
     }
 
-    
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PostMapping("/api/jsearch/job/save")
+    public ResponseEntity<JSearchJobHttpResponse> saveJob(@RequestBody JSearchJob jsearchJob, HttpSession session) {
+        JSearchJobModel savedJob = jobService.saveJob(jsearchJob, session);
+        JSearchJobHttpResponse savedJobResponse = savedJob.createResponse();
+        if (savedJobResponse != null)
+            return new ResponseEntity<>(savedJobResponse, HttpStatus.OK);
+        else
+            return ResponseEntity.badRequest().body(null);
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PostMapping("/api/jsearch/job/save/get/{userId}")
+    public ResponseEntity<List<JSearchJobHttpResponse>> getSavedJobs(@PathVariable String userId) {
+        List<JSearchJobHttpResponse> savedJSearchJobs = jobService.getSavedJobs(userId);
+        if (savedJSearchJobs != null)
+            return new ResponseEntity<>(savedJSearchJobs, HttpStatus.OK);
+        else 
+            return ResponseEntity.badRequest().body(null);
+
+    }
 }

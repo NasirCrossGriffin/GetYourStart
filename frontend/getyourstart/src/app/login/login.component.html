@@ -1,0 +1,14 @@
+<div class="LoginPage">
+    <div class="LoginContainer">
+        <div class="UsernameContainer">
+            <label for="UsernameInput">Username: </label>
+            <input type="text" class="UsernameInput" name="UsernameInput" (input)="alterUsername($event)" />
+        </div>
+
+        <div class="PasswordContainer">
+            <label for="PasswordInput">Password: </label>
+            <input type="password" class="PasswordInput" name="PasswordInput" (input)="alterPassword($event)"/>
+        </div>
+        <button (click)="submit()">Submit</button>
+    </div>
+</div>

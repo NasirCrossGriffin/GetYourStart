@@ -1,0 +1,31 @@
+<div class="Navbar">
+    <div class="NavbarContent">
+        <button class="drawerbutton" (click)="togglevisibility()">
+            <div class="drawerdiv"></div>
+            <div class="drawerdiv"></div>
+            <div class="drawerdiv"></div>
+        </button>
+        <a class="SiteLogo">GET YOUR START</a>
+        <p class="UserWelcome"*ngIf="user" >Welcome back, {{user.username}}!</p>
+    </div>
+    <div class="Separator"></div>
+</div>
+
+<div class="NavDrawer" *ngIf="navDrawerVisibility">
+    <div class="Background" (click)="togglevisibility()"></div>
+    <div class="Drawer">
+        <a class="NavLink" routerLink="/login" *ngIf="user === null">
+            <button class="DrawerItem NavLink">Login</button>
+        </a>
+
+        <button class="DrawerItem" *ngIf="user">Logout</button>
+
+        <a class="NavLink" routerLink="/view_jobs">
+            <button class="DrawerItem" >Jobs</button>
+        </a>
+
+        <a class="NavLink" routerLink="/savedjobs">
+            <button class="DrawerItem" >Saved Jobs</button>
+        </a>
+    </div>
+</div>
