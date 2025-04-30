@@ -1,5 +1,6 @@
 <div class="LoginPage">
     <div class="LoginContainer">
+        <h1 [style.font-family]="'Vine Font'">Login</h1>
         <div class="UsernameContainer">
             <label for="UsernameInput">Username: </label>
             <input type="text" class="UsernameInput" name="UsernameInput" (input)="alterUsername($event)" />
@@ -10,5 +11,6 @@
             <input type="password" class="PasswordInput" name="PasswordInput" (input)="alterPassword($event)"/>
         </div>
         <button (click)="submit()">Submit</button>
+        <p [style.color]="'red'" [style.font-size]="'20px'" [style.font-weight]="'bold'" *ngIf="authenticationMessage">Username or password incorrect</p>
     </div>
 </div>

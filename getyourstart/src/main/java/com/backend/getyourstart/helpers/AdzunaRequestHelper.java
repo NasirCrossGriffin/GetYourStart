@@ -1,27 +1,18 @@
 package com.backend.getyourstart.helpers;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.net.http.HttpResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
 
 import com.backend.getyourstart.dto.AdzunaJob;
 import com.backend.getyourstart.dto.AdzunaJobResponse;
-import com.backend.getyourstart.helpers.Header;
-
-
-import com.backend.getyourstart.helpers.RequestHelper;
-
-import java.io.UnsupportedEncodingException;
-import java.lang.StringBuilder;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class AdzunaRequestHelper {
     private RequestHelper requestHelper;
@@ -66,6 +57,21 @@ public class AdzunaRequestHelper {
         StringBuilder queryBuilder = new StringBuilder();
         String query = "";
 
+        List<String> entryLevelTerms = new ArrayList<String>();
+        entryLevelTerms.add("entry");
+        entryLevelTerms.add("junior");
+        entryLevelTerms.add("intern");
+        entryLevelTerms.add("internship");
+        entryLevelTerms.add("apprentice");
+        entryLevelTerms.add("apprenticeship");
+        String joinedTerms = String.join(" ", entryLevelTerms);
+        try {
+            joinedTerms = URLEncoder.encode(joinedTerms, "UTF-8");
+        } catch (Exception e) {
+            return;
+        }
+        queryBuilder.append("&what_or=");
+        queryBuilder.append(joinedTerms);
         queryBuilder.append("&what=");
         String whatParams = "";
         for(int i = 0; i < jobTypes.size(); i++) {

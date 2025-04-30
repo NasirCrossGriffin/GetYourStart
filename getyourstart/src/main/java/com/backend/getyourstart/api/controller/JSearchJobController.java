@@ -59,4 +59,15 @@ public class JSearchJobController {
             return ResponseEntity.badRequest().body(null);
 
     }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PostMapping("/api/jsearch/job/delete/{jobId}")
+    public ResponseEntity<String> deleteSavedJobs(@PathVariable String jobId) {
+        boolean jobDeleted = jobService.deleteJob(Long.parseLong(jobId));;
+        if (jobDeleted = true)
+            return new ResponseEntity<>("Job Deleted Successfully", HttpStatus.OK);
+        else 
+            return ResponseEntity.internalServerError().body("Job Deletion Failed");
+
+    }
 }

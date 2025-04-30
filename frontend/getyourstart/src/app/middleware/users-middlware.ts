@@ -1,64 +1,12 @@
-/*
-@RestController
-public class UserController {
-    private UserService userService;
+import { environment } from '../../environments/environment';
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
-    
-    @CrossOrigin(origins = "http://localhost:4200")
-    @PostMapping("/api/user")
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
-        System.out.println(userRequest.getUsername());
-        System.out.println(userRequest.getPassword());
-        UserResponse userResponse = userService.createUser(userRequest);
-
-        if (userResponse != null) {
-            return ResponseEntity.ok(userResponse);
-        } else {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }  
-
-    @CrossOrigin(origins = "http://localhost:4200")
-    @PostMapping("/api/user/authenticate")
-    public ResponseEntity<UserResponse> Authenticate(@RequestBody AuthenticationRequest authenticationRequest, HttpSession session) {
-        UserResponse userResponse = userService.Authenticate(authenticationRequest, session);
-
-        if (userResponse != null) {
-            return ResponseEntity.ok(userResponse);
-        } else {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
-    
-    @CrossOrigin(origins = "http://localhost:4200")
-    @PostMapping("/api/user/logout")
-    public ResponseEntity<String> logOut(HttpSession session) {
-        return userService.logOut(session);
-    }
-
-    @CrossOrigin(origins = "http://localhost:4200")
-    @PostMapping("/api/user/check")
-    public ResponseEntity<UserResponse> getLoggedIn(HttpSession session) {
-         UserResponse loggedIn = userService.getLoggedIn(session);
-
-         if (loggedIn != null) {
-            return ResponseEntity.ok(loggedIn);
-         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-         }
-    }
-}
-*/
+const BASE_URL : string = environment.BASE_URL;
 
 export async function createUser(userRequest : any) {
-    const foundUserResponse : Response = await fetch("http://localhost:8080/api/user", {
+    const foundUserResponse : Response = await fetch(`${BASE_URL}/api/user`, {
         method : "POST",
         headers : {"Content-Type" : "application/json"},
+        credentials: 'include',  
         body : JSON.stringify(userRequest)
     });
 
@@ -71,7 +19,7 @@ export async function createUser(userRequest : any) {
 }
 
 export async function authenticateUser(userRequest : any) {
-    const foundUserResponse : Response = await fetch("http://localhost:8080/api/user/authenticate", {
+    const foundUserResponse : Response = await fetch(`${BASE_URL}/api/user/authenticate`, {
         method : "POST",
         headers : {"Content-Type" : "application/json"},
         credentials: 'include',  
@@ -87,8 +35,10 @@ export async function authenticateUser(userRequest : any) {
 }
 
 export async function logoutUser() {
-    const Response : Response = await fetch("http://localhost:8080/api/user/logout", {
+    const Response : Response = await fetch(`${BASE_URL}/api/user/logout`, {
         method : "POST",
+        headers : {"Content-Type" : "application/json"},
+        credentials: 'include',
     });
 
     if (Response.ok) {
@@ -101,7 +51,7 @@ export async function logoutUser() {
 }
 
 export async function getLoggedInUser() {
-    const foundUserResponse : Response = await fetch("http://localhost:8080/api/user/check", {
+    const foundUserResponse : Response = await fetch(`${BASE_URL}/api/user/check`, {
         method : "POST",
         headers : {"Content-Type" : "application/json"},
         credentials: 'include',  

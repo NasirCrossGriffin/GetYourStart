@@ -12,8 +12,6 @@ import com.backend.getyourstart.repository.UserRepository;
 
 import jakarta.servlet.http.HttpSession;
 
-import com.backend.getyourstart.api.service.SessionService;
-
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -26,7 +24,7 @@ public class UserService {
     }
 
   
-    public UserResponse createUser(UserRequest userRequest) {
+    public UserResponse createUser(UserRequest userRequest, HttpSession session) {
         System.out.println(userRequest.getUsername());
         System.out.println(userRequest.getPassword());
 
@@ -41,7 +39,15 @@ public class UserService {
 
         newUser.setPassword(hashed);
 
-        UserModel savedUser = userRepository.save(newUser);
+        UserModel savedUser = null;
+
+        try {        
+            savedUser = userRepository.save(newUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        sessionService.createSession(session, savedUser);
 
         return savedUser.createResponse();
     }
@@ -87,6 +93,35 @@ public class UserService {
 
     public ResponseEntity<String> logOut(HttpSession session) {
         return sessionService.invalidateSession(session);
+    }
+    
+    public boolean deleteUser(Long userId) {
+        UserModel retrievedUser = getUserMiddleware(userId);
+
+        if (retrievedUser == null) {
+            return false;
+        }
+
+        try {
+            userRepository.delete(retrievedUser); 
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    public UserModel getUserMiddleware(Long userId) {
+        UserModel retrievedUser = null;
+
+        try {
+            retrievedUser = userRepository.getUserById(userId).get();
+        } catch (Exception e) {
+            return null;
+        }
+
+        return retrievedUser;
     }
     
 }

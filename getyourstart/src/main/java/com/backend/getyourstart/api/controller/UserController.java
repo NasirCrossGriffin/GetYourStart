@@ -2,7 +2,6 @@ package com.backend.getyourstart.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,10 +27,10 @@ public class UserController {
     
     @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/api/user")
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest, HttpSession session) {
         System.out.println(userRequest.getUsername());
         System.out.println(userRequest.getPassword());
-        UserResponse userResponse = userService.createUser(userRequest);
+        UserResponse userResponse = userService.createUser(userRequest, session);
 
         if (userResponse != null) {
             return ResponseEntity.ok(userResponse);

@@ -71,7 +71,13 @@ public class JSearchJobService {
         JSearchJobModel newModel = JSearchJob.createModel(jSearchJob);
         newModel.setUser(user);
 
-        JSearchJobModel savedModel = jobRepository.save(newModel);
+        JSearchJobModel savedModel = null;
+
+        try {
+            savedModel = jobRepository.save(newModel);
+        } catch (Exception e) {
+            return null;
+        }
 
         return savedModel;
     }
@@ -88,6 +94,35 @@ public class JSearchJobService {
         });
 
         return jsearchJobResponses;
+    }
+
+    public boolean deleteJob(Long jsearchJobId) {
+        JSearchJobModel retrievedJSearchJob = getJSearchJobMiddleware(jsearchJobId);
+
+        if (retrievedJSearchJob == null) {
+            return false;
+        }
+
+        try {
+            jobRepository.delete(retrievedJSearchJob); 
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    public JSearchJobModel getJSearchJobMiddleware(Long jobId) {
+        JSearchJobModel retrievedJob = null;
+
+        try {
+            retrievedJob = jobRepository.getJSearchJobById(jobId).get();
+        } catch (Exception e) {
+            return null;
+        }
+
+        return retrievedJob;
     }
 
 }

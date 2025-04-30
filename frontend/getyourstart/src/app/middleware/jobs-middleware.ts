@@ -1,53 +1,11 @@
-/*
-@RestController
-public class AdzunaJobController {
-    private AdzunaJobService jobService;
-
-    @Autowired
-    public AdzunaJobController(AdzunaJobService jobService) {
-        this.jobService = jobService;
-    }
-
-    @CrossOrigin(origins = "http://localhost:4200")
-    @PostMapping("/api/adzuna/job")
-    public ResponseEntity<List<AdzunaJob>> getJobs(@RequestBody AdzunaJobRequest jobRequest) {
-        List<AdzunaJob> jobsFound = jobService.getJobs(jobRequest);
-        if (jobsFound != null)
-            return new ResponseEntity<>(jobsFound, HttpStatus.OK);
-        else
-            return ResponseEntity.badRequest().body(null);
-    }
-
-    @CrossOrigin(origins = "http://localhost:4200")
-    @PostMapping("/api/adzuna/job/save")
-    public ResponseEntity<AdzunaJobHttpResponse> saveJob(@RequestBody AdzunaJob adzunaJob, HttpSession session) {
-        AdzunaJobModel savedJob = jobService.saveJob(adzunaJob, session);
-        AdzunaJobHttpResponse savedJobResponse = savedJob.createResponse();
-        if (savedJobResponse != null)
-            return new ResponseEntity<>(savedJobResponse, HttpStatus.OK);
-        else
-            return ResponseEntity.badRequest().body(null);
-    }
-
-    @CrossOrigin(origins = "http://localhost:4200")
-    @PostMapping("/api/adzuna/job/save/get")
-    public ResponseEntity<List<AdzunaJobHttpResponse>> getSavedJobs(@RequestBody String userId) {
-        List<AdzunaJobHttpResponse> savedAdzunaJobs = jobService.getSavedJobs(userId);
-        if (savedAdzunaJobs != null)
-            return new ResponseEntity<>(savedAdzunaJobs, HttpStatus.OK);
-        else 
-            return ResponseEntity.badRequest().body(null);
-
-    }
-}
-    */
-
-
+import { environment } from '../../environments/environment';
 
 //Get Jobs
 
+const BASE_URL : string = environment.BASE_URL;
+
 export async function getAdzunaJobs(jobsRequest : any) {
-    const jobsResponse = await fetch("http://localhost:8080/api/adzuna/job", {
+    const jobsResponse = await fetch(`${BASE_URL}/api/adzuna/job`, {
         method : "POST",
         headers : {"Content-Type" : "application/json"},
         body : JSON.stringify(jobsRequest)
@@ -67,7 +25,7 @@ export async function getAdzunaJobs(jobsRequest : any) {
 }
 
 export async function getJSearchJobs(jobsRequest : any) {
-    const jobsResponse = await fetch("http://localhost:8080/api/jsearch/job", {
+    const jobsResponse = await fetch(`${BASE_URL}/api/jsearch/job`, {
         method : "POST",
         headers : {"Content-Type" : "application/json"},
         body : JSON.stringify(jobsRequest)
@@ -87,7 +45,7 @@ export async function getJSearchJobs(jobsRequest : any) {
 }
 
 export async function saveAdzunaJob(adzunaJob : any) {
-    const jobsResponse = await fetch("http://localhost:8080/api/adzuna/job/save", {
+    const jobsResponse = await fetch(`${BASE_URL}/api/adzuna/job/save`, {
         method : "POST",
         headers : {"Content-Type" : "application/json"},
         credentials: 'include',  
@@ -107,8 +65,25 @@ export async function saveAdzunaJob(adzunaJob : any) {
     }
 }
 
+export async function deleteAdzunaJob(jobId : any) {
+    const jobsResponse = await fetch(`${BASE_URL}/api/adzuna/job/delete/${jobId}`, {
+        method : "POST",
+        headers : {"Content-Type" : "application/json"},
+    });
+    if (jobsResponse.ok) {
+        try {
+            return true;
+        } catch (err) {
+            console.log(err)
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
 export async function getSavedAdzunaJobs(userId : String) {
-    const jobsResponse = await fetch(`http://localhost:8080/api/adzuna/job/save/get/${userId}`, {
+    const jobsResponse = await fetch(`${BASE_URL}/api/adzuna/job/save/get/${userId}`, {
         method : "POST",
         headers : {"Content-Type" : "application/json"},
     });
@@ -128,7 +103,7 @@ export async function getSavedAdzunaJobs(userId : String) {
 
 
 export async function saveJSearchJob(jsearchJob : any) {
-    const jobsResponse = await fetch("http://localhost:8080/api/jsearch/job/save", {
+    const jobsResponse = await fetch(`${BASE_URL}/api/jsearch/job/save`, {
         method : "POST",
         headers : {"Content-Type" : "application/json"},
         credentials: 'include',  
@@ -148,8 +123,26 @@ export async function saveJSearchJob(jsearchJob : any) {
     }
 }
 
+export async function deleteJSearchJob(jobId : any) {
+    const jobsResponse = await fetch(`${BASE_URL}/api/jsearch/job/delete/${jobId}`, {
+        method : "POST",
+        headers : {"Content-Type" : "application/json"},
+    });
+    if (jobsResponse.ok) {
+        try {
+            return true;
+        } catch (err) {
+            console.log(err)
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+
 export async function getSavedJSearchJobs(userId : String) {
-    const jobsResponse = await fetch(`http://localhost:8080/api/jsearch/job/save/get/${userId}`, {
+    const jobsResponse = await fetch(`${BASE_URL}/api/jsearch/job/save/get/${userId}`, {
         method : "POST",
         headers : {"Content-Type" : "application/json"},
     });

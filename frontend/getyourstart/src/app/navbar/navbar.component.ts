@@ -1,7 +1,7 @@
-import { Component } from "@angular/core";
+import { ChangeDetectorRef, Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { getLoggedInUser } from "../middleware/users-middlware";
-import { RouterModule } from "@angular/router";
+import { getLoggedInUser, logoutUser } from "../middleware/users-middlware";
+import { Router, RouterModule } from "@angular/router";
 
 @Component({
     selector : "app-navbar",
@@ -14,6 +14,8 @@ import { RouterModule } from "@angular/router";
 export class NavbarComponent {
     user : any = null;
     navDrawerVisibility : boolean = false;
+    constructor(private router: Router, private cdRef: ChangeDetectorRef) {}
+
 
     async ngOnInit() {
         this.user = await getLoggedInUser();
@@ -22,5 +24,13 @@ export class NavbarComponent {
 
     togglevisibility() {
         this.navDrawerVisibility = !this.navDrawerVisibility;
+    }
+
+    async logout() {
+        const logoutMessage = await logoutUser();
+        console.log(logoutMessage);
+        this.router.navigateByUrl(`/login`).then(() => {
+            window.location.reload();
+          });
     }
 }

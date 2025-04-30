@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "adzuna_jobs")
 public class AdzunaJobModel {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "title", nullable = false, length = 100)
@@ -57,6 +57,15 @@ public class AdzunaJobModel {
     public AdzunaJobModel() {
 
     }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 
     public String getTitle() {
         return this.title;
@@ -155,19 +164,20 @@ public class AdzunaJobModel {
     }
 
         public AdzunaJobHttpResponse createResponse() {
-        AdzunaJobHttpResponse response = new AdzunaJobHttpResponse();
-        response.setTitle(this.getTitle());
-        response.setDescription(this.getDescription());
-        response.setRedirect_url(this.getRedirect_url());
-        response.setCreated(this.getCreated());
-        response.setSalary_min(this.getSalary_min().toString());
-        response.setSalary_max(this.getSalary_max().toString());
-        response.setContract_time(this.getContract_time());
-        response.setSalary_is_predicted(this.getSalary_is_predicted());
-        response.setCompany(this.getCompany());
-        response.setLocation(this.getLocation());
-        response.setCategory(this.getCategory());
-        response.setId(this.id);
-        return response;
+            AdzunaJobHttpResponse response = new AdzunaJobHttpResponse();
+            response.setTitle(this.getTitle());
+            response.setDescription(this.getDescription());
+            response.setRedirect_url(this.getRedirect_url());
+            response.setCreated(this.getCreated());
+            response.setSalary_min(this.getSalary_min().toString());
+            response.setSalary_max(this.getSalary_max().toString());
+            response.setContract_time(this.getContract_time());
+            response.setSalary_is_predicted(this.getSalary_is_predicted());
+            response.setCompany(this.getCompany());
+            response.setLocation(this.getLocation());
+            response.setCategory(this.getCategory());
+            response.setUserId(this.getUser().getId());
+            response.setId(this.getId());
+            return response;
     }
 }

@@ -15,17 +15,21 @@
     <div class="Background" (click)="togglevisibility()"></div>
     <div class="Drawer">
         <a class="NavLink" routerLink="/login" *ngIf="user === null">
-            <button class="DrawerItem NavLink">Login</button>
+            <button class="DrawerItem">LOGIN</button>
         </a>
 
-        <button class="DrawerItem" *ngIf="user">Logout</button>
+        <a class="NavLink" routerLink="/signup" *ngIf="user === null">
+            <button class="DrawerItem">SIGNUP</button>
+        </a>
+
+        <button class="DrawerItem NavLink" *ngIf="user" (click)="logout()">Logout</button>
 
         <a class="NavLink" routerLink="/view_jobs">
-            <button class="DrawerItem" >Jobs</button>
+            <button class="DrawerItem" >JOBS</button>
         </a>
 
-        <a class="NavLink" routerLink="/savedjobs">
-            <button class="DrawerItem" >Saved Jobs</button>
+        <a class="NavLink" routerLink="/savedjobs" *ngIf="user">
+            <button class="DrawerItem" >SAVED JOBS</button>
         </a>
     </div>
 </div>

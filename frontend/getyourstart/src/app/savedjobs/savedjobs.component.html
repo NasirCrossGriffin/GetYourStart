@@ -12,7 +12,7 @@
                     </div>
                     <div class="JobInfoContainer">
                         <p>{{job.title}}</p>
-                        <p>{{job.created}}</p>
+                        <p>{{job.date}}</p>
                         <p>{{job.company}}</p>
                         <p>{{job.location}}</p>
                     </div>
@@ -28,7 +28,7 @@
                     </div>
                     <div class="JobInfoContainer">
                         <p>{{job.job_title || ""}}</p>
-                        <p>{{job.job_posted_human_readable || ""}}</p>
+                        <p>{{job.job_posted_human_readable || "No Date Available"}}</p>
                         <p>{{job.employer_name || ""}}</p>
                         <p>{{job.job_location || ""}}</p>
                     </div>
@@ -47,7 +47,7 @@
                 <h1 *ngIf="chosenJob.API === 'JSearch'">{{chosenJob.job.job_title || ""}}</h1>
                 <h2 *ngIf="chosenJob.API === 'Adzuna'">{{chosenJob.job.company || ""}}</h2>
                 <h2 *ngIf="chosenJob.API === 'JSearch'">{{chosenJob.job.job_publisher || ""}}</h2>
-                <p *ngIf="chosenJob.API === 'Adzuna'">{{chosenJob.job.created || ""}}</p>
+                <p *ngIf="chosenJob.API === 'Adzuna'">{{chosenJob.job.date || ""}}</p>
                 <p *ngIf="chosenJob.API === 'JSearch'">{{chosenJob.job.job_posted_human_readable || ""}}</p>
                 <p *ngIf="chosenJob.API === 'Adzuna'">{{chosenJob.job.description || ""}}</p>
                 <p *ngIf="chosenJob.API === 'JSearch'">{{chosenJob.job.job_description || ""}}</p>
@@ -55,8 +55,10 @@
                 <p *ngIf="chosenJob.API === 'JSearch'">Salary Min: {{chosenJob.job.job_min_salary || ""}}</p>
                 <p *ngIf="chosenJob.API === 'Adzuna'">Salary Max: {{chosenJob.job.salary_max || ""}}</p>
                 <p *ngIf="chosenJob.API === 'JSearch'">Salary Max: {{chosenJob.job.job_max_salary || ""}}</p>
-                <a [href]="chosenJob.job.redirect_url" *ngIf="chosenJob.API === 'Adzuna'">Apply Here</a>
-                <a [href]="chosenJob.job.job_apply_link" *ngIf="chosenJob.API === 'JSearch'">Apply Here</a>
+                <a [href]="chosenJob.job.redirect_url" target="_blank" *ngIf="chosenJob.API === 'Adzuna'">Apply Here</a>
+                <a [href]="chosenJob.job.job_apply_link" target="_blank" *ngIf="chosenJob.API === 'JSearch'">Apply Here</a>
+                <button  *ngIf="chosenJob.API === 'Adzuna' && user!== null" (click)="deleteAdzunaJobHandler()">Delete Job</button>
+                <button  *ngIf="chosenJob.API === 'JSearch' && user!== null" (click)="deleteJSearchJobHandler()">Delete Job</button>
             </div>
         </div>
     </div>

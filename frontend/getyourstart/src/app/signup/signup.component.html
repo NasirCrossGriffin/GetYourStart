@@ -1,0 +1,18 @@
+<div class="LoginPage">
+    <div class="LoginContainer">
+        <h1 [style.font-family]="'Vine Font'">Signup</h1>
+        <div class="UsernameContainer">
+            <label for="UsernameInput">Username: </label>
+            <input type="text" class="UsernameInput" name="UsernameInput" (input)="alterUsername($event)" />
+            <p [style.color]="'red'" [style.font-size]="'20px'" [style.font-weight]="'bold'" *ngIf="usernameValidator === false">Username must be at least 5 characters</p>
+        </div>
+
+        <div class="PasswordContainer">
+            <label for="PasswordInput">Password: </label>
+            <input type="password" class="PasswordInput" name="PasswordInput" (input)="alterPassword($event)"/>
+            <p [style.color]="'red'" [style.font-size]="'20px'" [style.font-weight]="'bold'" *ngIf="passwordValidator === false">Password must be at least 8 characters and contain a number, a special character, and a capital.</p>
+        </div>
+        <p [style.color]="'red'" [style.font-size]="'20px'" [style.font-weight]="'bold'" *ngIf="creationMessage === true">Account creation failed, username may already be taken</p>
+        <button (click)="submit()">Submit</button>
+    </div>
+</div>

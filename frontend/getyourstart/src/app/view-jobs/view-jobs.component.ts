@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { getAdzunaJobs, getJSearchJobs, saveJSearchJob } from "../middleware/jobs-middleware";
 import { saveAdzunaJob } from "../middleware/jobs-middleware";
+import { getLoggedInUser } from "../middleware/users-middlware";
 
 @Component({
     selector : "app-viewjobs",
@@ -23,7 +24,7 @@ export class ViewJobsComponent {
     jsearchJobs : any;
     adzunaJobRequest : any  = {
         country : 'us',
-        numResults: null,
+        numResults: 20,
         jobTypes: [],
         page: 1,
         where: null,
@@ -49,12 +50,17 @@ export class ViewJobsComponent {
     };
     jobsQueried : boolean = false;
     saveJobRevealed : boolean = false;
+    saveJobStatus : boolean = false;
+    user : any = null;
+    DrawerVisibility : boolean = true;
 
+    async ngOnInit() {
+        this.user = await getLoggedInUser();
+    }
 
-    addType(e : Event) {
-        var whatInput = (e.target as HTMLElement).previousElementSibling;
-        console.log(whatInput);
-        this.adzunaJobRequest.jobTypes.push((whatInput as HTMLInputElement).value);
+    alterType(e : Event) {
+        this.adzunaJobRequest.jobTypes[0] = (e.target as HTMLSelectElement).value;
+        this.jsearchJobRequest.jobTypes[0] = (e.target as HTMLSelectElement).value;
     }
 
     alterCountry(e : Event) {
@@ -158,6 +164,7 @@ export class ViewJobsComponent {
         console.log(this.adzunaJobRequest)
         console.log(this.jsearchJobRequest)
         this.adzunaJobs = await getAdzunaJobs(this.adzunaJobRequest);
+        this.reformatDates();
         this.jsearchJobs = await getJSearchJobs(this.jsearchJobRequest);
         console.log(this.adzunaJobs);
         console.log(this.jsearchJobs);
@@ -166,17 +173,28 @@ export class ViewJobsComponent {
     }
 
     async saveAdzunaJobHandler() {
-        const savedJob = saveAdzunaJob(this.chosenJob.job);
+        const savedJob = await saveAdzunaJob(this.chosenJob.job);
+        if (savedJob !== null) {
+            this.saveJobStatus = true;
+        } else {
+            this.saveJobStatus = false;
+        }
         this.saveJobRevealed = true;
         this.saveConfirmation = true;
         setTimeout(() => {
             this.hideSaveConfirmation();
           }, 5000);
         console.log(savedJob);
+        
     }
 
     async saveJSearchJobHandler() {
-        const savedJob = saveJSearchJob(this.chosenJob.job);
+        const savedJob = await saveJSearchJob(this.chosenJob.job);
+        if (savedJob !== null) {
+            this.saveJobStatus = true;
+        } else {
+            this.saveJobStatus = false;
+        }
         this.saveJobRevealed = true;
         this.saveConfirmation = true;
         setTimeout(() => {
@@ -189,4 +207,23 @@ export class ViewJobsComponent {
         this.saveConfirmation = false;
     }
 
+    reformatDates() {
+        this.adzunaJobs.forEach((job : any) => {
+            if (job.created !== null) {
+                var datetime = new Date(job.created);
+                
+                const month = (datetime.getMonth() + 1).toString().padStart(2, '0'); // months are 0-indexed
+                const day = datetime.getDate().toString().padStart(2, '0');
+                const year = datetime.getFullYear();
+
+                const formattedDate = `${month}/${day}/${year}`;
+
+                job.date = formattedDate;
+            }
+        });
+    }
+
+    toggleDrawerVisibiity() {
+        this.DrawerVisibility = !this.DrawerVisibility;
+    }
 }

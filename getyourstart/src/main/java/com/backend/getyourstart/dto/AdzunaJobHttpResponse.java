@@ -12,6 +12,7 @@ public class AdzunaJobHttpResponse {
     private String company;
     private String location;
     private String category;
+    private Long userId;
     private Long id;
 
 
@@ -20,7 +21,7 @@ public class AdzunaJobHttpResponse {
     }
 
 
-    public AdzunaJobHttpResponse(String title, String description, String redirect_url, String created, String salary_min, String salary_max, String contract_time, String salary_is_predicted, String company, String location, String category, Long id) {
+    public AdzunaJobHttpResponse(String title, String description, String redirect_url, String created, String salary_min, String salary_max, String contract_time, String salary_is_predicted, String company, String location, String category, Long id, Long userId) {
         this.title = title;
         this.description = description;
         this.redirect_url = redirect_url;
@@ -32,9 +33,17 @@ public class AdzunaJobHttpResponse {
         this.company = company;
         this.location = location;
         this.category = category;
+        this.userId = userId;
         this.id = id;
     }
 
+    public Long getUserId() {
+        return this.userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     public String getTitle() {
         return this.title;
@@ -123,7 +132,6 @@ public class AdzunaJobHttpResponse {
     public void setCategory(String category) {
         this.category = category;
     }
-
 
     public Long getId() {
         return this.id;

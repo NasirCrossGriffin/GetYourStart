@@ -1,21 +1,17 @@
 package com.backend.getyourstart.api.service;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-import com.backend.getyourstart.helpers.AdzunaRequestHelper;
-import com.backend.getyourstart.dto.AdzunaJobRequest;
-import com.backend.getyourstart.dto.AdzunaJob;
-import com.backend.getyourstart.dto.AdzunaJobHttpResponse;
-import com.backend.getyourstart.repository.AdzunaJobRepository;
-
-import java.net.http.HttpResponse;
-
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.backend.getyourstart.dto.AdzunaJob;
+import com.backend.getyourstart.dto.AdzunaJobHttpResponse;
+import com.backend.getyourstart.dto.AdzunaJobRequest;
 import com.backend.getyourstart.dto.UserResponse;
+import com.backend.getyourstart.helpers.AdzunaRequestHelper;
 import com.backend.getyourstart.models.AdzunaJobModel;
 import com.backend.getyourstart.models.UserModel;
+import com.backend.getyourstart.repository.AdzunaJobRepository;
 import com.backend.getyourstart.repository.UserRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -83,7 +79,11 @@ public class AdzunaJobService {
         adzunaJobModel.setLocation(adzunaJob.getLocation().getDisplay_name());
         adzunaJobModel.setCategory(adzunaJob.getCategory().getLabel());
 
-        jobRepository.save(adzunaJobModel);
+        try {
+            jobRepository.save(adzunaJobModel);
+        } catch (Exception e) {
+            return null;
+        }
 
         return adzunaJobModel;
     }
@@ -95,23 +95,40 @@ public class AdzunaJobService {
         List<AdzunaJobHttpResponse> adzunaJobResponses = new ArrayList<AdzunaJobHttpResponse>();
 
         adzunaJobs.forEach((job) -> {
-            adzunaJobResponses.add(new AdzunaJobHttpResponse(
-                job.getTitle(),
-                job.getDescription(),
-                job.getRedirect_url(),
-                job.getCreated(),
-                job.getSalary_min(),
-                job.getSalary_max(),
-                job.getContract_time(),
-                job.getSalary_is_predicted(),
-                job.getCompany(),
-                job.getLocation(),
-                job.getCategory(),
-                job.getUser().getId()
-            ));
+            adzunaJobResponses.add(job.createResponse());
         });
 
         return adzunaJobResponses;
     }
+
+    public boolean deleteJob(Long adzunaJobId) {
+        AdzunaJobModel retrievedAdzunaJob = getAdzunaJobMiddleware(adzunaJobId);
+
+        if (retrievedAdzunaJob == null) {
+            return false;
+        }
+
+        try {
+            jobRepository.delete(retrievedAdzunaJob); 
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    public AdzunaJobModel getAdzunaJobMiddleware(Long jobId) {
+        AdzunaJobModel retrievedJob = null;
+
+        try {
+            retrievedJob = jobRepository.getAdzunaJobById(jobId).get();
+        } catch (Exception e) {
+            return null;
+        }
+
+        return retrievedJob;
+    }
+
 
 }

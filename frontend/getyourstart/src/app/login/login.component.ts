@@ -14,6 +14,7 @@ import { Router } from "@angular/router";
 export class LoginComponent {
     username : string = "";
     password : string = "";
+    authenticationMessage : boolean = false;
     constructor(private router: Router, private cdRef: ChangeDetectorRef) {}
 
     alterUsername(e : Event) {
@@ -40,6 +41,7 @@ export class LoginComponent {
               });
               return foundUser;
         } else {
+            this.authenticationMessage = true;
             return null;
         }
     }
