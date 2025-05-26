@@ -1,0 +1,36 @@
+<div class="LandingPage">
+    <div [class]="'FirstSection '.concat(firstSectionIntersecting ? 'Visible' : 'Invisible')">
+        <div class="GraduatePhotoContainer">
+            <img src="/Graduates.jpg"/>
+        </div>
+        <div class="Title">
+            <p>GET YOUR START</p>
+        </div>
+    </div>
+    <div [class]="'SecondSection '.concat(secondSectionIntersecting ? 'Visible' : 'Invisible')">
+        <div class="WorkerPhotoContainer">
+            <img src="/Worker.jpg"/>
+        </div>
+        <div class="Content">
+            <div class="Header">
+                <p>MISSION</p>
+            </div>
+            <div class="Text">
+                <P>We help you get your career off the ground by finding you the best entry level jobs. We aggregate entry-level jobs from multiple apis, including Adzuna, and Rapid-API, saving you time and energy.</P>
+            </div>
+        </div>
+    </div>
+    <div [class]="'ThirdSection '.concat(thirdSectionIntersecting ? 'Visible' : 'Invisible')">
+        <div class="NasirPhotoContainer">
+            <img src="/NasirGriffin.png"/>
+        </div>
+        <div class="Content">
+            <div class="Header">
+                <p>ABOUT ME</p>
+            </div>
+            <div class="Text">
+                <P>I am Nasir Griffin. I am the sole developer of this project, and a new graduate myself. I built this app in order to find a position, and I'm happy to share it with all of you!</P>
+            </div>
+        </div>
+    </div>
+</div>
