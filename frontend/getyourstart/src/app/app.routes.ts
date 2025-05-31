@@ -11,5 +11,5 @@ export const routes: Routes = [
     { path: 'signup', component: SignupComponent },
     { path: 'savedjobs', component: SavedJobsComponent },
     { path: 'home', component: LandingPageComponent },
-    { path: '**', component: ViewJobsComponent }, // Default route
+    { path: '**', component: LandingPageComponent }, // Default route
 ];

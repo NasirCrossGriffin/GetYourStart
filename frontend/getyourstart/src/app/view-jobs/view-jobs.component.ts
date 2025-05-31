@@ -33,9 +33,9 @@ export class ViewJobsComponent {
         salaryMin: null,
         salaryMax: null,
         fullTime: 1,
-        partTime: null,
-        contract: null,
-        permanent: null 
+        partTime: 1,
+        contract: 1,
+        permanent: 1 
     };
     jsearchJobRequest : any  = {
          job : null,
@@ -53,6 +53,8 @@ export class ViewJobsComponent {
     saveJobStatus : boolean = false;
     user : any = null;
     DrawerVisibility : boolean = true;
+    jobValidator : boolean = false;
+    jobTypeValidator : boolean = false;
 
     async ngOnInit() {
         this.user = await getLoggedInUser();
@@ -60,7 +62,8 @@ export class ViewJobsComponent {
 
     alterType(e : Event) {
         this.adzunaJobRequest.jobTypes[0] = (e.target as HTMLSelectElement).value;
-        this.jsearchJobRequest.jobTypes[0] = (e.target as HTMLSelectElement).value;
+        this.jsearchJobRequest.job = (e.target as HTMLSelectElement).value;
+        this.validateJob()
     }
 
     alterCountry(e : Event) {
@@ -105,6 +108,7 @@ export class ViewJobsComponent {
         } else {
             this.adzunaJobRequest.fullTime = null
         }
+        this.validateJobType()
     }
 
     alterPartTime(e : Event) {
@@ -115,6 +119,8 @@ export class ViewJobsComponent {
         } else {
             this.adzunaJobRequest.partTime = null
         }
+        this.validateJobType()
+
     }
 
     alterContract(e : Event) {
@@ -126,6 +132,8 @@ export class ViewJobsComponent {
         } else {
             this.adzunaJobRequest.contract = null
         }
+        this.validateJobType()
+
     }
 
     alterPermanent(e : Event) {
@@ -136,6 +144,8 @@ export class ViewJobsComponent {
         } else {
             this.adzunaJobRequest.permanent = null
         }
+        this.validateJobType()
+
     }
 
     setAdzunaJob(index : number) {
@@ -159,6 +169,19 @@ export class ViewJobsComponent {
     }
 
     async submit() {
+        if (this.jobValidator === false || this.jobTypeValidator === false) {
+            return
+        }
+
+        if (this.adzunaJobRequest.where === null || this.adzunaJobRequest.where === '') {
+            this.adzunaJobRequest.where = this.adzunaJobRequest.country
+        }
+
+        if (this.adzunaJobRequest.distance === null || this.adzunaJobRequest.distance === '' || this.jsearchJobRequest.radius === null || this.jsearchJobRequest.radius === '') {
+            this.adzunaJobRequest.distance = null
+            this.jsearchJobRequest.radius = 100
+        }
+
         this.loading = true;
         this.jsearchJobRequest.job = this.adzunaJobRequest.jobTypes.join(", ") + " in " + this.adzunaJobRequest.where;
         console.log(this.adzunaJobRequest)
@@ -226,4 +249,37 @@ export class ViewJobsComponent {
     toggleDrawerVisibiity() {
         this.DrawerVisibility = !this.DrawerVisibility;
     }
+
+    validateJob() {
+        console.log("job validator triggered")
+        if (this.adzunaJobRequest.jobTypes[0] === null || this.adzunaJobRequest.jobTypes[0] === '' || this.jsearchJobRequest.job === null || this.jsearchJobRequest.job === '') {
+            this.jobValidator = false
+            return
+        }
+
+        this.jobValidator = true;
+    }
+
+    validateJobType() {
+        const listOfTypes = [this.adzunaJobRequest.fullTime, this.adzunaJobRequest.partTime, this.adzunaJobRequest.contract, this.adzunaJobRequest.permanent]
+        var trueCount = 0
+
+        console.log(listOfTypes)
+
+        listOfTypes.forEach((type) => {
+            if (type === 1) 
+                trueCount++
+        })
+
+        console.log("True count is: " + trueCount)
+
+        if (trueCount > 1 || trueCount === 0) {
+            this.jobTypeValidator = false
+            return
+        }
+
+        this.jobTypeValidator = true;
+    }
+
+
 }

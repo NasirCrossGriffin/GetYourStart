@@ -33,4 +33,8 @@ export class NavbarComponent {
             window.location.reload();
           });
     }
+
+    navigateHome() {
+        this.router.navigateByUrl(`/home`)
+    }
 }

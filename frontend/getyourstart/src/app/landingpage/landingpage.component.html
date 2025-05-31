@@ -1,5 +1,5 @@
 <div class="LandingPage">
-    <div [class]="'FirstSection '.concat(firstSectionIntersecting ? 'Visible' : 'Invisible')">
+    <div [class]="'FirstSection '.concat(firstSectionIntersecting ? 'fade-in' : 'fade-out')">
         <div class="GraduatePhotoContainer">
             <img src="/Graduates.jpg"/>
         </div>
@@ -7,8 +7,8 @@
             <p>GET YOUR START</p>
         </div>
     </div>
-    <div [class]="'SecondSection '.concat(secondSectionIntersecting ? 'Visible' : 'Invisible')">
-        <div class="WorkerPhotoContainer">
+    <div [class]="'SecondSection '.concat(secondSectionIntersecting ? 'fade-in' : 'fade-out')">
+        <div [class]="'WorkerPhotoContainer'.concat(secondSectionIntersecting ? ' slide-up' : '')">
             <img src="/Worker.jpg"/>
         </div>
         <div class="Content">
@@ -20,8 +20,8 @@
             </div>
         </div>
     </div>
-    <div [class]="'ThirdSection '.concat(thirdSectionIntersecting ? 'Visible' : 'Invisible')">
-        <div class="NasirPhotoContainer">
+    <div [class]="'ThirdSection '.concat(thirdSectionIntersecting ? 'fade-in' : 'fade-out')">
+        <div [class]="'NasirPhotoContainer'.concat(thirdSectionIntersecting ? ' slide-up' : '')">
             <img src="/NasirGriffin.png"/>
         </div>
         <div class="Content">

@@ -1,9 +1,10 @@
 <div class="ViewJobs">
     <button class="DrawerButton" (click)="toggleDrawerVisibiity()">Search Drawer</button>
-    <div class="JobMenu">
-        <div class="JobMenuContainer" *ngIf="DrawerVisibility === true">
+    <div [class]="'JobMenu '.concat(DrawerVisibility === true ? 'slide-in' : 'slide-out')">
+        <div class="JobMenuContainer">
             <p>Jobs: </p>
             <input class="whatinput" type="text" (input)="alterType($event)"/>
+            <a *ngIf="jobValidator === false" class="validator">You must enter a job</a>
             <p>Country: </p>
             <select value="us" class="countryinput" (change)="alterCountry($event)">
                 <option value="us">us</option>
@@ -62,7 +63,9 @@
                 <option value="true">true</option>
                 <option value="false">false</option>
             </select>
+            <a *ngIf="jobTypeValidator === false" class="validator">Only one employment type may be selected at a time</a>
             <button class="SubmitButton" (click)="submit()">Submit</button>
+            
             
         </div>
     </div>
@@ -146,5 +149,8 @@
             <p>{{saveJobStatus ? 'Job Saved Successfully' : 'Failed To Save Job'}}</p>
         </div>
    </div> 
+   <div class="PeaksAndValleysCont">
+        <img src="/PeaksAndValleys.png" />
+   </div>
 </div>
 

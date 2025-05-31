@@ -5,7 +5,8 @@
             <div class="drawerdiv"></div>
             <div class="drawerdiv"></div>
         </button>
-        <a class="SiteLogo">GET YOUR START</a>
+        <button class="SiteLogo" (click)="navigateHome()">GET YOUR START</button>
+        
         <p class="UserWelcome"*ngIf="user" >Welcome back, {{user.username}}!</p>
     </div>
     <div class="Separator"></div>
@@ -13,7 +14,7 @@
 
 <div class="NavDrawer" *ngIf="navDrawerVisibility">
     <div class="Background" (click)="togglevisibility()"></div>
-    <div class="Drawer">
+    <div class="Drawer slide-in">
         <a class="NavLink" routerLink="/login" *ngIf="user === null">
             <button class="DrawerItem">LOGIN</button>
         </a>
