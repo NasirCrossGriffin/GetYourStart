@@ -31,10 +31,10 @@
             <input class="whereinput" type="text" (input)="alterWhere($event)"/>
             <p>Distance: </p>
             <input class="distanceinput" type="text" (input)="alterDistance($event)"/>
+            <a *ngIf="distanceValidator === false" class="validator">The distance should be entered in as only a number, check for whitespaces.</a>
             <p>Sort By: </p>
             <select class="sortbyinput" (change)="alterSortBy($event)">
                 <option value="default">default</option>
-                <option value="hybrid">hybrid</option>
                 <option value="date">date</option>
                 <option value="salary">salary</option>
                 <option value="relevance">relevance</option>
@@ -43,7 +43,8 @@
             <input class="salarymininput" type="text" (input)="alterSalaryMin($event)"/>
             <p>Salary Maximum: </p>
             <input class="salarymaxinput" type="text" (input)="alterSalaryMax($event)"/>
-            <p>Full-Time: </p>
+            <a *ngIf="salaryValidator === false" class="validator">The salary should be entered in as only a number, check for whitespaces.</a>
+            <p>Full-Time: </p> 
             <select class="fulltimeinput" (change)="alterFullTime($event)">
                 <option value="true">true</option>
                 <option value="false">false</option>
@@ -63,7 +64,7 @@
                 <option value="true">true</option>
                 <option value="false">false</option>
             </select>
-            <a *ngIf="jobTypeValidator === false" class="validator">Only one employment type may be selected at a time</a>
+            <a *ngIf="jobTypeValidator === false" class="validator">At least one employment type must be selected. Only one employment type may be selected at a time.</a>
             <button class="SubmitButton" (click)="submit()">Submit</button>
             
             

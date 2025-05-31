@@ -55,6 +55,8 @@ export class ViewJobsComponent {
     DrawerVisibility : boolean = true;
     jobValidator : boolean = false;
     jobTypeValidator : boolean = false;
+    salaryValidator : boolean = false;
+    distanceValidator : boolean = false;
 
     async ngOnInit() {
         this.user = await getLoggedInUser();
@@ -86,6 +88,7 @@ export class ViewJobsComponent {
     alterDistance(e : Event) {
         this.adzunaJobRequest.distance = (e.target as HTMLInputElement).value;
         this.jsearchJobRequest.radius = (e.target as HTMLInputElement).value;
+        this.validateDistance()
     }
 
     alterSortBy(e : Event) {
@@ -94,10 +97,12 @@ export class ViewJobsComponent {
 
     alterSalaryMin(e : Event) {
         this.adzunaJobRequest.salaryMin = (e.target as HTMLInputElement).value;
+        this.validateSalary()
     }
 
     alterSalaryMax(e : Event) {
         this.adzunaJobRequest.salaryMax = (e.target as HTMLInputElement).value;
+        this.validateSalary()
     }
 
     alterFullTime(e : Event) {
@@ -169,6 +174,9 @@ export class ViewJobsComponent {
     }
 
     async submit() {
+        this.validateJob()
+        this.validateJobType()
+
         if (this.jobValidator === false || this.jobTypeValidator === false) {
             return
         }
@@ -181,6 +189,10 @@ export class ViewJobsComponent {
             this.adzunaJobRequest.distance = null
             this.jsearchJobRequest.radius = 100
         }
+
+         if (this.adzunaJobRequest.sortBy === 'default') {
+            this.adzunaJobRequest.sortBy = null
+         }
 
         this.loading = true;
         this.jsearchJobRequest.job = this.adzunaJobRequest.jobTypes.join(", ") + " in " + this.adzunaJobRequest.where;
@@ -281,5 +293,19 @@ export class ViewJobsComponent {
         this.jobTypeValidator = true;
     }
 
+    validateSalary() {
+        if ((this.adzunaJobRequest.salaryMin !== null && this.adzunaJobRequest.salaryMin !== '') || (this.adzunaJobRequest.salaryMax !== null && this.adzunaJobRequest.salaryMax !== '')) {
+            this.salaryValidator = !isNaN(parseFloat(this.adzunaJobRequest.salaryMin)) && isFinite(this.adzunaJobRequest.salaryMin) && !isNaN(parseFloat(this.adzunaJobRequest.salaryMax)) && isFinite(this.adzunaJobRequest.salaryMax) && !this.adzunaJobRequest.salaryMin.includes(" ") && !this.adzunaJobRequest.salaryMax.includes(" ");
+        } else {
+            this.salaryValidator = true
+        }
+    }
 
+    validateDistance() {
+        if ((this.adzunaJobRequest.distance !== null && this.adzunaJobRequest.distance !== '') || (this.jsearchJobRequest.radius !== null && this.jsearchJobRequest.radius !== '')) {
+            this.distanceValidator = !isNaN(parseFloat(this.adzunaJobRequest.distance)) && isFinite(this.adzunaJobRequest.distance) && !isNaN(parseFloat(this.jsearchJobRequest.radius)) && isFinite(this.jsearchJobRequest.radius) && !this.adzunaJobRequest.distance.includes(" ") && !this.jsearchJobRequest.radius.includes(" ");
+        } else {
+            this.distanceValidator = true
+        }
+    }
 }
