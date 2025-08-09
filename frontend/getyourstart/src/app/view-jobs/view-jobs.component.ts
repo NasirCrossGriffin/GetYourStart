@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { getAdzunaJobs, getJSearchJobs, saveJSearchJob } from "../middleware/jobs-middleware";
-import { saveAdzunaJob } from "../middleware/jobs-middleware";
+import { getGYSJobs, saveGYSJob } from "../middleware/jobs-middleware";
 import { getLoggedInUser } from "../middleware/users-middlware";
 
 @Component({
@@ -14,40 +13,25 @@ import { getLoggedInUser } from "../middleware/users-middlware";
 
 export class ViewJobsComponent {
     viewingJob : boolean = false;
-    adzunaJobs : any;
     loading : boolean = false;
     saveConfirmation : boolean = false;
     chosenJob : any = {
-        API : null,
         job : null
     }
-    jsearchJobs : any;
-    adzunaJobRequest : any  = {
-        country : 'us',
-        numResults: 20,
-        jobTypes: [],
-        page: 1,
-        where: null,
+    jobRequest: any = {
+        jobTitle: '',
+        country: '',
+        where: '',
         distance: null,
-        sortBy: null,
+        sortBy: '',
         salaryMin: null,
         salaryMax: null,
-        fullTime: 1,
-        partTime: 1,
-        contract: 1,
-        permanent: 1 
+        fullTime: null,
+        partTime: null,
+        contract: null,
+        permanent: null
     };
-    jsearchJobRequest : any  = {
-         job : null,
-         page : 1,
-         numPages : 1,
-         country : 'us',
-         language : 'en',
-         datePosted : 'all',
-         employmentTypes : 'FULLTIME',
-         jobRequirements : 'no_experience',
-         radius : null
-    };
+    jobs : any = [];
     jobsQueried : boolean = false;
     saveJobRevealed : boolean = false;
     saveJobStatus : boolean = false;
@@ -63,66 +47,51 @@ export class ViewJobsComponent {
     }
 
     alterType(e : Event) {
-        this.adzunaJobRequest.jobTypes[0] = (e.target as HTMLSelectElement).value;
-        this.jsearchJobRequest.job = (e.target as HTMLSelectElement).value;
+        this.jobRequest.jobTitle = (e.target as HTMLSelectElement).value;
         this.validateJob()
     }
 
     alterCountry(e : Event) {
-        this.adzunaJobRequest.country = (e.target as HTMLSelectElement).value;
-        this.jsearchJobRequest.country = (e.target as HTMLSelectElement).value;
-    }
-
-    alterNumResults(e : Event) {
-        this.adzunaJobRequest.numResults = (e.target as HTMLInputElement).value;
-    }
-
-    alterPage(e : Event) {
-        this.adzunaJobRequest.page = (e.target as HTMLInputElement).value;
+        this.jobRequest.country = (e.target as HTMLSelectElement).value;
     }
 
     alterWhere(e : Event) {
-        this.adzunaJobRequest.where = (e.target as HTMLInputElement).value;
+        this.jobRequest.where = (e.target as HTMLInputElement).value;
     }
 
     alterDistance(e : Event) {
-        this.adzunaJobRequest.distance = (e.target as HTMLInputElement).value;
-        this.jsearchJobRequest.radius = (e.target as HTMLInputElement).value;
+        this.jobRequest.distance = (e.target as HTMLInputElement).value;
         this.validateDistance()
     }
 
     alterSortBy(e : Event) {
-        this.adzunaJobRequest.sortBy = (e.target as HTMLInputElement).value;
+        this.jobRequest.sortBy = (e.target as HTMLInputElement).value;
     }
 
     alterSalaryMin(e : Event) {
-        this.adzunaJobRequest.salaryMin = (e.target as HTMLInputElement).value;
+        this.jobRequest.salaryMin = (e.target as HTMLInputElement).value;
         this.validateSalary()
     }
 
     alterSalaryMax(e : Event) {
-        this.adzunaJobRequest.salaryMax = (e.target as HTMLInputElement).value;
+        this.jobRequest.salaryMax = (e.target as HTMLInputElement).value;
         this.validateSalary()
     }
 
     alterFullTime(e : Event) {
         if ((e.target as HTMLInputElement).value === 'true') {
-            this.adzunaJobRequest.fullTime = 1;
-            this.jsearchJobRequest.employmentTypes = 'FULLTIME';
-            console.log(this.jsearchJobRequest.employmentTypes);
+            this.jobRequest.fullTime = 1;
         } else {
-            this.adzunaJobRequest.fullTime = null
+            this.jobRequest.fullTime = 0;
         }
         this.validateJobType()
     }
 
     alterPartTime(e : Event) {
         if ((e.target as HTMLInputElement).value === 'true') {
-            this.adzunaJobRequest.partTime = 1
-            this.jsearchJobRequest.employmentTypes = 'PARTTIME';
-            console.log(this.jsearchJobRequest.employmentTypes);
+            this.jobRequest.partTime = 1
         } else {
-            this.adzunaJobRequest.partTime = null
+            this.jobRequest.partTime = 0
         }
         this.validateJobType()
 
@@ -130,12 +99,9 @@ export class ViewJobsComponent {
 
     alterContract(e : Event) {
         if ((e.target as HTMLInputElement).value === 'true') {
-            this.adzunaJobRequest.contract = 1
-            this.jsearchJobRequest.employmentTypes = 'CONTRACTOR';
-            console.log(this.jsearchJobRequest.employmentTypes)
-
+            this.jobRequest.contract = 1
         } else {
-            this.adzunaJobRequest.contract = null
+            this.jobRequest.contract = 0
         }
         this.validateJobType()
 
@@ -143,27 +109,16 @@ export class ViewJobsComponent {
 
     alterPermanent(e : Event) {
         if ((e.target as HTMLInputElement).value === 'true') {
-            this.adzunaJobRequest.permanent = 1
-            this.jsearchJobRequest.employmentTypes = 'CONTRACTOR';
-            console.log(this.jsearchJobRequest.employmentTypes);
+            this.jobRequest.permanent = 1
         } else {
-            this.adzunaJobRequest.permanent = null
+            this.jobRequest.permanent = 0
         }
         this.validateJobType()
 
     }
 
-    setAdzunaJob(index : number) {
-        this.chosenJob.API = "Adzuna";
-        this.chosenJob.job = this.adzunaJobs[index];
-        console.log(index);
-        console.log(this.chosenJob);
-        this.toggleJobView();
-    }
-
-    setJsearchJob(index : number) {
-        this.chosenJob.API = "JSearch";
-        this.chosenJob.job = this.jsearchJobs[index];
+    setSelectedJob(index : number) {
+        this.chosenJob = this.jobs[index];
         console.log(index);
         console.log(this.chosenJob);
         this.toggleJobView();
@@ -176,39 +131,34 @@ export class ViewJobsComponent {
     async submit() {
         this.validateJob()
         this.validateJobType()
+        this.validateDistance()
+        this.validateSalary()
 
-        if (this.jobValidator === false || this.jobTypeValidator === false) {
+        if (this.jobValidator === false || this.jobTypeValidator === false || this.distanceValidator === false || this.salaryValidator === false) {
             return
         }
 
-        if (this.adzunaJobRequest.where === null || this.adzunaJobRequest.where === '') {
-            this.adzunaJobRequest.where = this.adzunaJobRequest.country
+        if (this.jobRequest.where === null || this.jobRequest.where === '') {
+            this.jobRequest.where = this.jobRequest.country
         }
 
-        if (this.adzunaJobRequest.distance === null || this.adzunaJobRequest.distance === '' || this.jsearchJobRequest.radius === null || this.jsearchJobRequest.radius === '') {
-            this.adzunaJobRequest.distance = null
-            this.jsearchJobRequest.radius = 100
+        if (this.jobRequest.distance === null || this.jobRequest.distance === '') {
+            this.jobRequest.distance = 25
         }
 
-         if (this.adzunaJobRequest.sortBy === 'default') {
-            this.adzunaJobRequest.sortBy = null
+         if (this.jobRequest.sortBy === 'default') {
+            this.jobRequest.sortBy = null
          }
 
         this.loading = true;
-        this.jsearchJobRequest.job = this.adzunaJobRequest.jobTypes.join(", ") + " in " + this.adzunaJobRequest.where;
-        console.log(this.adzunaJobRequest)
-        console.log(this.jsearchJobRequest)
-        this.adzunaJobs = await getAdzunaJobs(this.adzunaJobRequest);
-        this.reformatDates();
-        this.jsearchJobs = await getJSearchJobs(this.jsearchJobRequest);
-        console.log(this.adzunaJobs);
-        console.log(this.jsearchJobs);
+        this.jobs = await getGYSJobs(this.jobRequest)
+        console.log(this.jobs);
         this.jobsQueried = true;
         this.loading = false;
     }
 
-    async saveAdzunaJobHandler() {
-        const savedJob = await saveAdzunaJob(this.chosenJob.job);
+    async saveJobHandler() {
+        const savedJob = await saveGYSJob(this.chosenJob);
         if (savedJob !== null) {
             this.saveJobStatus = true;
         } else {
@@ -223,27 +173,12 @@ export class ViewJobsComponent {
         
     }
 
-    async saveJSearchJobHandler() {
-        const savedJob = await saveJSearchJob(this.chosenJob.job);
-        if (savedJob !== null) {
-            this.saveJobStatus = true;
-        } else {
-            this.saveJobStatus = false;
-        }
-        this.saveJobRevealed = true;
-        this.saveConfirmation = true;
-        setTimeout(() => {
-            this.hideSaveConfirmation();
-          }, 5000);
-        console.log(savedJob);
-    }
-
     hideSaveConfirmation() {
         this.saveConfirmation = false;
     }
 
     reformatDates() {
-        this.adzunaJobs.forEach((job : any) => {
+        this.jobs.forEach((job : any) => {
             if (job.created !== null) {
                 var datetime = new Date(job.created);
                 
@@ -264,7 +199,7 @@ export class ViewJobsComponent {
 
     validateJob() {
         console.log("job validator triggered")
-        if (this.adzunaJobRequest.jobTypes[0] === null || this.adzunaJobRequest.jobTypes[0] === '' || this.jsearchJobRequest.job === null || this.jsearchJobRequest.job === '') {
+        if (this.jobRequest.jobTitle === null || this.jobRequest.jobTitle === '' || this.jobRequest.jobTitle === null || this.jobRequest.jobTitle === '') {
             this.jobValidator = false
             return
         }
@@ -273,7 +208,7 @@ export class ViewJobsComponent {
     }
 
     validateJobType() {
-        const listOfTypes = [this.adzunaJobRequest.fullTime, this.adzunaJobRequest.partTime, this.adzunaJobRequest.contract, this.adzunaJobRequest.permanent]
+        const listOfTypes = [this.jobRequest.fullTime, this.jobRequest.partTime, this.jobRequest.contract, this.jobRequest.permanent]
         var trueCount = 0
 
         console.log(listOfTypes)
@@ -294,16 +229,16 @@ export class ViewJobsComponent {
     }
 
     validateSalary() {
-        if ((this.adzunaJobRequest.salaryMin !== null && this.adzunaJobRequest.salaryMin !== '') || (this.adzunaJobRequest.salaryMax !== null && this.adzunaJobRequest.salaryMax !== '')) {
-            this.salaryValidator = !isNaN(parseFloat(this.adzunaJobRequest.salaryMin)) && isFinite(this.adzunaJobRequest.salaryMin) && !isNaN(parseFloat(this.adzunaJobRequest.salaryMax)) && isFinite(this.adzunaJobRequest.salaryMax) && !this.adzunaJobRequest.salaryMin.includes(" ") && !this.adzunaJobRequest.salaryMax.includes(" ");
+        if ((this.jobRequest.salaryMin !== null && this.jobRequest.salaryMin !== '')) {
+            this.salaryValidator = !isNaN(parseFloat(this.jobRequest.salaryMin)) && isFinite(this.jobRequest.salaryMin) && !isNaN(parseFloat(this.jobRequest.salaryMax)) && isFinite(this.jobRequest.salaryMax) && !this.jobRequest.salaryMin.includes(" ") && !this.jobRequest.salaryMax.includes(" ");
         } else {
             this.salaryValidator = true
         }
     }
 
     validateDistance() {
-        if ((this.adzunaJobRequest.distance !== null && this.adzunaJobRequest.distance !== '') || (this.jsearchJobRequest.radius !== null && this.jsearchJobRequest.radius !== '')) {
-            this.distanceValidator = !isNaN(parseFloat(this.adzunaJobRequest.distance)) && isFinite(this.adzunaJobRequest.distance) && !isNaN(parseFloat(this.jsearchJobRequest.radius)) && isFinite(this.jsearchJobRequest.radius) && !this.adzunaJobRequest.distance.includes(" ") && !this.jsearchJobRequest.radius.includes(" ");
+        if ((this.jobRequest.distance !== null && this.jobRequest.distance !== '')) {
+            this.distanceValidator = !isNaN(parseFloat(this.jobRequest.distance)) && isFinite(this.jobRequest.distance) && !this.jobRequest.distance.includes(" ");
         } else {
             this.distanceValidator = true
         }

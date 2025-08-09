@@ -111,4 +111,29 @@ public class AdzunaJob {
         this.category = category;
     }
 
+    public GYSJobResponse toGYSJobResponse() {
+        GYSJobResponse gysJob = new GYSJobResponse();
+
+        gysJob.setSourceApi("adzuna");
+        gysJob.setTitle(this.getTitle());
+        gysJob.setDescription(this.getDescription());
+        gysJob.setApplyLink(this.getRedirect_url());
+        gysJob.setPostedDate(this.getCreated());
+        gysJob.setSalaryMin(this.getSalary_min());
+        gysJob.setSalaryMax(this.getSalary_max());
+        gysJob.setJobType(this.getContract_time());
+
+        gysJob.setEmployerName(this.getCompany() != null ? this.getCompany().getDisplay_name() : null);
+        gysJob.setLocation(this.getLocation() != null ? this.getLocation().getDisplay_name() : null);
+        gysJob.setRemote(null); // AdzunaJob does not specify remote status
+
+        // Fields not available in AdzunaJob
+        gysJob.setSalaryCurrency(null);
+        gysJob.setSalaryPeriod(null);
+        gysJob.setBenefits(null);
+        gysJob.setRequirements(null);
+        gysJob.setQualifications(null);
+
+        return gysJob;
+    }
 }

@@ -163,21 +163,54 @@ public class AdzunaJobModel {
         this.user = user;
     }
 
-        public AdzunaJobHttpResponse createResponse() {
-            AdzunaJobHttpResponse response = new AdzunaJobHttpResponse();
-            response.setTitle(this.getTitle());
-            response.setDescription(this.getDescription());
-            response.setRedirect_url(this.getRedirect_url());
-            response.setCreated(this.getCreated());
-            response.setSalary_min(this.getSalary_min().toString());
-            response.setSalary_max(this.getSalary_max().toString());
-            response.setContract_time(this.getContract_time());
-            response.setSalary_is_predicted(this.getSalary_is_predicted());
-            response.setCompany(this.getCompany());
-            response.setLocation(this.getLocation());
-            response.setCategory(this.getCategory());
-            response.setUserId(this.getUser().getId());
-            response.setId(this.getId());
-            return response;
+    public AdzunaJobHttpResponse createResponse() {
+        AdzunaJobHttpResponse response = new AdzunaJobHttpResponse();
+        response.setTitle(this.getTitle());
+        response.setDescription(this.getDescription());
+        response.setRedirect_url(this.getRedirect_url());
+        response.setCreated(this.getCreated());
+        response.setSalary_min(this.getSalary_min().toString());
+        response.setSalary_max(this.getSalary_max().toString());
+        response.setContract_time(this.getContract_time());
+        response.setSalary_is_predicted(this.getSalary_is_predicted());
+        response.setCompany(this.getCompany());
+        response.setLocation(this.getLocation());
+        response.setCategory(this.getCategory());
+        response.setUserId(this.getUser().getId());
+        response.setId(this.getId());
+        return response;
     }
+
+    public SavedGYSJobModel toGYSJob() {
+        SavedGYSJobModel gys = new SavedGYSJobModel();
+
+        gys.setSourceApi("Adzuna");
+        gys.setTitle(this.title);
+        gys.setDescription(this.description);
+        gys.setApplyLink(this.redirect_url);
+        gys.setEmployerName(this.company);
+        gys.setLocation(this.location);
+        gys.setRemote(false); // Adzuna data doesn't have this explicitly; adjust if needed
+        gys.setPostedDate(this.created);
+        gys.setSalaryMin(parseDoubleSafe(this.salary_min));
+        gys.setSalaryMax(parseDoubleSafe(this.salary_max));
+        gys.setSalaryCurrency(null); // Adzuna doesn’t seem to provide this
+        gys.setSalaryPeriod(null);   // Add if available
+        gys.setJobType(this.contract_time);
+        gys.setBenefits(null);       // Adzuna API doesn’t provide
+        gys.setRequirements(null);
+        gys.setQualifications(null);
+        gys.setUser(this.user);
+
+        return gys;
+    }
+
+    private Double parseDoubleSafe(String value) {
+        try {
+            return value != null ? Double.parseDouble(value) : null;
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
 }

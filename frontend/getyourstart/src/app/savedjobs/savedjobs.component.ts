@@ -1,8 +1,7 @@
 import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { getLoggedInUser } from "../middleware/users-middlware";
-import { deleteAdzunaJob, deleteJSearchJob, getAdzunaJobs, getJSearchJobs, getSavedJSearchJobs } from "../middleware/jobs-middleware";
-import { getSavedAdzunaJobs } from "../middleware/jobs-middleware";
+import { deleteGYSJob, getGYSJobs, getGYSSavedJobs } from "../middleware/jobs-middleware";
 
 @Component({
     selector : "app-savedjobs",
@@ -14,48 +13,30 @@ import { getSavedAdzunaJobs } from "../middleware/jobs-middleware";
 
 export class SavedJobsComponent {
     viewingJob : boolean = false;
-    adzunaJobs : any = [];
-    chosenJob : any = {
-        API : null,
-        job : null
-    }
-    jsearchJobs : any = [];
+    jobs : any = [];
+    chosenJob : any = null
     user : any = null;
     loading : boolean = true;
 
     async ngOnInit() {
         this.loading = true;
         this.user = await getLoggedInUser();
-        this.adzunaJobs = await getSavedAdzunaJobs(this.user.id);
+        this.jobs = await getGYSSavedJobs(this.user.id);
         this.reformatDates();
-        this.jsearchJobs = await getSavedJSearchJobs(this.user.id);
         this.loading = false;
     }
 
 
-    setAdzunaJob(index : number) {
-        this.chosenJob.API = "Adzuna";
-        this.chosenJob.job = this.adzunaJobs[index];
+    setSelectedJob(index : number) {
+        this.chosenJob = this.jobs[index];
         console.log(index);
         console.log(this.chosenJob);
         this.toggleJobView();
     }
 
-    setJsearchJob(index : number) {
-        this.chosenJob.API = "JSearch";
-        this.chosenJob.job = this.jsearchJobs[index];
-        console.log(index);
-        console.log(this.chosenJob);
-        this.toggleJobView();
-    }
 
-    deleteAdzunaJobHandler() {
-        deleteAdzunaJob(this.chosenJob.job.id);
-        window.location.reload();
-    }
-
-    deleteJSearchJobHandler() {
-        deleteJSearchJob(this.chosenJob.job.id);
+    deleteJobHandler() {
+        deleteGYSJob(this.chosenJob.id);
         window.location.reload();
     }
 
@@ -64,7 +45,7 @@ export class SavedJobsComponent {
     }
 
     reformatDates() {
-        this.adzunaJobs.forEach((job : any) => {
+        this.jobs.forEach((job : any) => {
             if (job.created !== null) {
                 var datetime = new Date(job.created);
                 

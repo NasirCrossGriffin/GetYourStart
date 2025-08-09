@@ -308,4 +308,28 @@ public class JSearchJob {
         return model;
     }
 
+        public GYSJobResponse toGYSJobResponse() {
+        GYSJobResponse gysJob = new GYSJobResponse();
+
+        gysJob.setSourceApi("jsearch");
+        gysJob.setTitle(this.getJob_title());
+        gysJob.setDescription(this.getJob_description());
+        gysJob.setApplyLink(this.getJob_apply_link());
+        gysJob.setEmployerName(this.getEmployer_name());
+        gysJob.setLocation(this.getJob_location());
+        gysJob.setRemote(this.getJob_is_remote());
+        gysJob.setPostedDate(this.getJob_posted_human_readable());
+        gysJob.setSalaryMin(this.getJob_min_salary());
+        gysJob.setSalaryMax(this.getJob_max_salary());
+        gysJob.setSalaryCurrency(this.getJob_salary_currency());
+        gysJob.setSalaryPeriod(this.getJob_salary_period());
+        gysJob.setJobType(this.getJob_employment_type());
+        gysJob.setBenefits(this.getJob_benefits() != null ? String.join(", ", this.getJob_benefits()) : null);
+        gysJob.setRequirements(this.getJob_highlights() != null ? this.getJob_highlights().getRequirements() : null);
+        gysJob.setQualifications(this.getJob_highlights() != null ? this.getJob_highlights().getQualifications() : null);
+
+        return gysJob;
+    }
+
+
 }

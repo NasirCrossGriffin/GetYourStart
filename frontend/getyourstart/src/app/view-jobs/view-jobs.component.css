@@ -10,6 +10,15 @@
     scrollbar-color: white black;
 }
 
+.Jobs {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: fit-content;
+    padding-bottom: 50px;
+}
+
 @keyframes slide-in {
     0% {
         transform: translateX(-500px);
@@ -301,6 +310,7 @@
     justify-content: center;
     font-weight: bold;
     color: white;
+    box-shadow: 12px 12px 12px 12px rgb(0, 0, 0, 0.5);
 }
 
 .DrawerButton, .SubmitButton {

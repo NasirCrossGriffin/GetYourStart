@@ -398,4 +398,28 @@ public class JSearchJobModel {
     
         return response;
     }
+
+    public SavedGYSJobModel convertFromJSearch() {
+        SavedGYSJobModel gys = new SavedGYSJobModel();
+        gys.setSourceApi("jsearch");
+        gys.setTitle(this.getJob_title());
+        gys.setDescription(this.getJob_description());
+        gys.setApplyLink(this.getJob_apply_link());
+        gys.setEmployerName(this.getEmployer_name());
+        gys.setEmployerLogo(this.getEmployer_logo());
+        gys.setLocation(this.getJob_location());
+        gys.setRemote(this.getJob_is_remote());
+        gys.setPostedDate(this.getJob_posted_human_readable());
+        gys.setSalaryMin(this.getJob_min_salary());
+        gys.setSalaryMax(this.getJob_max_salary());
+        gys.setSalaryCurrency(this.getJob_salary_currency());
+        gys.setSalaryPeriod(this.getJob_salary_period());
+        gys.setJobType(this.getJob_employment_type());
+        gys.setBenefits(this.getJob_benefits());
+        gys.setQualifications(this.getQualifications());
+        gys.setRequirements(this.getRequirements());
+        gys.setUser(this.user()); // inherited from relationship
+        return gys;
+    }
+
 }

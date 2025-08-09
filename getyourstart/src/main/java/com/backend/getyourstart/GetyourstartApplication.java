@@ -29,14 +29,14 @@ public class GetyourstartApplication {
 			System.setProperty("ADZUNA_APP_KEY", dotenv.get("ADZUNA_APP_KEY"));
 			System.setProperty("ADZUNA_APP_ID", dotenv.get("ADZUNA_APP_ID"));
 			System.setProperty("RAPIDAPI_APP_KEY", dotenv.get("RAPIDAPI_APP_KEY"));
-			System.setProperty("POSTGRES_URL", dotenv.get("POSTGRES_URL"));
+			System.setProperty("POSTGRES_URL", dotenv.get("DEVELOPMENT_POSTGRES_URL"));
 			System.setProperty("POSTGRES_USERNAME", dotenv.get("POSTGRES_USERNAME"));
 			System.setProperty("POSTGRES_PASSWORD", dotenv.get("POSTGRES_PASSWORD"));
 		} else if (environment.equals("production")) {
 			System.setProperty("ADZUNA_APP_KEY", System.getenv("ADZUNA_APP_KEY"));
 			System.setProperty("ADZUNA_APP_ID", System.getenv("ADZUNA_APP_ID"));
 			System.setProperty("RAPIDAPI_APP_KEY", System.getenv("RAPIDAPI_APP_KEY"));
-			System.setProperty("POSTGRES_URL", System.getenv("POSTGRES_URL"));
+			System.setProperty("POSTGRES_URL", System.getenv("PRODUCTION_POSTGRES_URL"));
 			System.setProperty("POSTGRES_USERNAME", System.getenv("POSTGRES_USERNAME"));
 			System.setProperty("POSTGRES_PASSWORD", System.getenv("POSTGRES_PASSWORD"));
 		}
